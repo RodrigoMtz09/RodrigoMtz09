@@ -29,4 +29,4 @@ I'm eager to work on challenging projects that involve extracting insights from 
 
 #### Contact Information:
 Email: rodrigo_mm@live.com.mx
-LinkedIn: https://www.linkedin.com/in/rodrigomartinezmina/ 
+   LinkedIn: https://www.linkedin.com/in/rodrigomartinezmina/ 
