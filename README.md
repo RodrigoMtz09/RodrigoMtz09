@@ -4,7 +4,8 @@
 Hello, I'm Rodrigo Martinez Mina, currently based in Montreal studying Analytics, Big Data and Business Intelligence at Trebas Institute
 
 #### Background:
-I hold a Bachelor's degree in International Studies from University of Monterrey and a Master Business Administration (MBA) from Regiomontana University
+I hold a Bachelor's degree in International Studies from University of Monterrey and a Master Business Administration (MBA) from Regiomontana University.
+
 Additionally, I have completed various online courses and certifications in data analysis, including: 
 - Data Analyst Professional Certification from DataCamp
 - SQL for Business Analysts from DataCamp
@@ -28,5 +29,4 @@ I'm eager to work on challenging projects that involve extracting insights from 
 
 #### Contact Information:
 Email: rodrigo_mm@live.com.mx
-
 LinkedIn: https://www.linkedin.com/in/rodrigomartinezmina/ 
