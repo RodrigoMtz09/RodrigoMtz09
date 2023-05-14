@@ -6,7 +6,7 @@ Hello, I'm Rodrigo Martinez Mina, currently based in Montreal studying Analytics
 #### Background:
 I hold a Bachelor's degree in International Studies from University of Monterrey and a Master Business Administration (MBA) from Regiomontana University.
 
-Additionally, I have completed various online courses and certifications in data analysis, including: 
+Additionally, I have completed several online courses and certifications in data analysis, including: 
 - Data Analyst Professional Certification from DataCamp
 - SQL for Business Analysts from DataCamp
 - Data Analyst with Python from DataCamp
