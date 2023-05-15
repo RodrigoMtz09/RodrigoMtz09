@@ -3,10 +3,11 @@
 #### Introduction
 * 📍Montreal, Canada 
 * 💻 Studying Big Data Analysis at Trebas Institute 
-* 🎯 Always learning something ew 
+* 🎯 Always learning something new 
 
 #### Background:
-I hold a Bachelor's degree in International Studies from University of Monterrey and a Master Business Administration (MBA) from Regiomontana University.
+* Bachelor's degree in International Studies from University of Monterrey 
+* Master Business Administration (MBA) at Regiomontana University
 
 Additionally, I have completed several online courses and certifications in data analysis, including: 
 - Data Analyst Professional Certification from DataCamp
@@ -23,7 +24,7 @@ Additionally, I have completed several online courses and certifications in data
 - Tools: Excel, Jupyter Notebook, DeepNote
 
 #### Experience:
-I worked as a Sales Performance Analyst at Hamburg Sud, where I led performance analysis of Middle America region, reporting to regional manager and delivering insightful findings.
+I worked as a Sales Performance Analyst at Hamburg Sud, where I led performance analysis of Middle America region, reporting to regional manager and delivering insightful findings
 
 #### Collaboration:
 I'm actively seeking opportunities to collaborate with a company to contribute my data analysis skills and gain real-world experience. 
