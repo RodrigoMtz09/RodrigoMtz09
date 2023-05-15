@@ -1,7 +1,9 @@
-### Hi there! 👋
+### Hi there, I'm Rodrigo Mtz. 👋🏽
 
-#### Introduction:
-Hello, I'm Rodrigo Martinez Mina, currently based in Montreal studying Analytics, Big Data and Business Intelligence at Trebas Institute
+#### Introduction
+📍Montreal, Canada 
+💻 Studying Big Data Analysis at Trebas Institute 
+🎯 Always learning something ew 
 
 #### Background:
 I hold a Bachelor's degree in International Studies from University of Monterrey and a Master Business Administration (MBA) from Regiomontana University.
