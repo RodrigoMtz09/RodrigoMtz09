@@ -1,5 +1,5 @@
 ## Hi there, I'm Rodrigo Mtz. 👋🏽
-### Passionate Data Analyst 
+### A Passionate Data Analyst 📊
 
 
 #### Introduction
