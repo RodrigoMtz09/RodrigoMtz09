@@ -1,4 +1,6 @@
-### Hi there, I'm Rodrigo Mtz. 👋🏽
+## Hi there, I'm Rodrigo Mtz. 👋🏽
+### Passionate Data Analyst 
+
 
 #### Introduction
 * 📍Montreal, Canada 
