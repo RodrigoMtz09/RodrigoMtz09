@@ -1,8 +1,8 @@
 ### Hi there, I'm Rodrigo Mtz. 👋🏽
 
 #### Introduction
-📍Montreal, Canada 
-💻 Studying Big Data Analysis at Trebas Institute 
+* 📍Montreal, Canada 
+* 💻 Studying Big Data Analysis at Trebas Institute 
 🎯 Always learning something ew 
 
 #### Background:
