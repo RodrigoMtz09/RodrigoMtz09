@@ -4,7 +4,7 @@
 
 #### Introduction
 * 📍Montreal, Canada 
-* 💻 Studying Big Data Analysis at Trebas Institute 
+* 💻 Certficate Big Data Analysis at Trebas Institute 
 * 🎯 Always learning something new 
 
 #### Background:
@@ -19,11 +19,11 @@ Additionally, I have completed several online courses and certifications in data
 - Machine Learning Fundamentals from DataCamp
 
 #### Skills:
-- Programming Languages: Python, R, SQL
+- Programming Languages: Python, SQL
+- Data Visualization: Power BI, Tableau, Google Analytics, Looker
 - Statistical Analysis: Hypothesis testing, regression analysis, clustering
-- Data Visualization: Tableau, Matplotlib, Seaborn, Power BI
 - Machine Learning: Classification, regression, feature selection
-- Tools: Excel, Jupyter Notebook, DeepNote
+- Other Tools: Excel, Jupyter Notebook, DeepNote
 
 #### Experience:
 I worked as a Sales Performance Analyst at Hamburg Sud, where I led performance analysis of Middle America region, reporting to regional manager and delivering insightful findings
