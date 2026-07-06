@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Trainer · Aprende SQL escribiendo queries</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="marca">
+      <span class="logo">▮ SQL</span>
+      <span class="marca-txt">Trainer</span>
+    </div>
+    <div class="progreso-global">
+      <div class="progreso-info">
+        <span id="progreso-texto">0 / 0 resueltos</span>
+        <button id="btn-reiniciar" class="btn-mini" title="Reiniciar progreso">Reiniciar</button>
+      </div>
+      <div class="progreso-track"><div id="progreso-barra" class="progreso-fill"></div></div>
+    </div>
+  </header>
+
+  <div id="estado-carga" class="estado-carga">Cargando motor de base de datos…</div>
+
+  <main class="layout">
+    <!-- Columna izquierda: niveles + ejercicios + esquema -->
+    <aside class="panel-izq">
+      <div id="tabs-niveles" class="tabs"></div>
+      <div id="lista-ejercicios" class="lista-ejercicios"></div>
+
+      <div class="esquema-wrap">
+        <h3>Esquema de la base de datos</h3>
+        <p class="esquema-sub">Base ficticia <strong>TiendaTech</strong></p>
+        <div id="esquema"></div>
+      </div>
+    </aside>
+
+    <!-- Columna derecha: enunciado + editor + resultados -->
+    <section class="panel-der">
+      <div class="enunciado-card">
+        <div class="enunciado-head">
+          <span id="ej-nivel" class="badge">Basico</span>
+          <h2 id="ej-titulo">—</h2>
+        </div>
+        <p id="ej-enunciado" class="enunciado-texto">Selecciona un ejercicio para comenzar.</p>
+        <button id="btn-toggle-pista" class="btn-link">Mostrar pista</button>
+        <div id="pista-box" class="pista-box oculto">
+          <strong>Pista:</strong> <span id="pista-texto"></span>
+        </div>
+      </div>
+
+      <div class="editor-card">
+        <div class="editor-head">
+          <span>Tu consulta SQL</span>
+          <span class="editor-hint">Ctrl/Cmd + Enter para ejecutar</span>
+        </div>
+        <textarea id="editor" spellcheck="false" placeholder="Escribe aqui tu consulta, por ejemplo:&#10;SELECT * FROM productos;"></textarea>
+        <div class="botonera">
+          <button id="btn-ejecutar" class="btn btn-primario">▶ Ejecutar</button>
+          <button id="btn-verificar" class="btn btn-exito">✔ Verificar</button>
+          <button id="btn-limpiar" class="btn btn-neutro">Limpiar</button>
+          <button id="btn-solucion" class="btn btn-fantasma">Ver solucion</button>
+        </div>
+      </div>
+
+      <div id="mensaje" class="mensaje"></div>
+      <div class="resultado-card">
+        <div class="resultado-head">Resultado</div>
+        <div id="resultado-tabla" class="resultado-tabla"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    Practica SQL con SQLite ejecutandose en tu navegador · Hecho para aprender haciendo.
+  </footer>
+
+  <!-- sql.js (SQLite compilado a WebAssembly) — incluido localmente, funciona sin conexion -->
+  <script src="vendor/sql-wasm.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/exercises.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
