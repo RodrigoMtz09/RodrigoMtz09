@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { HomePage } from "@/pages/HomePage";
 import { ExamPage } from "@/pages/ExamPage";
+import { StudyPage } from "@/pages/StudyPage";
 import { QuestionView } from "@/components/QuestionView";
 import { Markdown } from "@/components/ui/Markdown";
 import { ALL_QUESTIONS, CASE_STUDIES } from "@/lib/content";
@@ -23,6 +24,12 @@ describe("page render smoke", () => {
     const html = renderToStaticMarkup(<ExamPage navigate={noop} />);
     expect(html).toContain("Exam simulator");
     expect(html).toContain("Start exam");
+  });
+
+  it("StudyPage setup renders", () => {
+    const html = renderToStaticMarkup(<StudyPage navigate={noop} />);
+    expect(html).toContain("Study mode");
+    expect(html).toContain("Due for review");
   });
 });
 
