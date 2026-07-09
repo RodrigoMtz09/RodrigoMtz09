@@ -1,0 +1,1355 @@
+{
+  "version": "2026.04.20",
+  "domain": "visualize",
+  "questions": [
+    {
+      "id": "viz-rep-0001",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Choose the appropriate visualization",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You are building a sales report. Management wants to see **total revenue broken down by product category**, ordered from highest to lowest, so they can quickly compare category performance at a glance.\n\nWhich visualization should you use?",
+      "exhibit": "A single table with columns: ProductCategory (text), Revenue (currency). There are 8 product categories.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bar chart"
+        },
+        {
+          "id": "b",
+          "text": "Line chart"
+        },
+        {
+          "id": "c",
+          "text": "Scatter chart"
+        },
+        {
+          "id": "d",
+          "text": "Gauge"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "A bar chart is the standard choice for comparing a single measure across a categorical dimension. Bars can be sorted descending so the highest category appears first, making comparison immediate.",
+        "whyNot": {
+          "b": "Line charts are designed to show a trend of a value over a continuous axis such as time, not to compare discrete categories.",
+          "c": "Scatter charts show the relationship between two (or three) numeric measures across items, not a single measure by category.",
+          "d": "A gauge displays progress of a single value toward a target; it cannot break a measure down across multiple categories."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-types-for-reports-and-q-and-a",
+      "tags": [
+        "visualization-choice",
+        "bar-chart"
+      ]
+    },
+    {
+      "id": "viz-rep-0002",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Choose the appropriate visualization",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A logistics analyst must display a **single delivery-performance percentage against a defined target** on an executive summary page. The visual should show the current value, the target, and how far the value is from the target using a radial arc.\n\nWhich visualization best meets this requirement?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Gauge chart"
+        },
+        {
+          "id": "b",
+          "text": "KPI visual"
+        },
+        {
+          "id": "c",
+          "text": "Card"
+        },
+        {
+          "id": "d",
+          "text": "Clustered column chart"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "A gauge chart shows a single value on a circular arc between a minimum and maximum, with a target line, making it ideal for showing progress toward a goal.",
+        "whyNot": {
+          "b": "The KPI visual shows a value, a goal, and a trend over time, but it uses a status indicator and trend line rather than a radial arc.",
+          "c": "A card shows only a single number with no target or arc.",
+          "d": "A clustered column chart compares values across categories and does not depict progress toward a target on an arc."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-radial-gauge-charts",
+      "tags": [
+        "visualization-choice",
+        "gauge"
+      ]
+    },
+    {
+      "id": "viz-rep-0003",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Choose the appropriate visualization",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You need a visual that shows a **single metric with its value, a goal, and whether the metric is trending up or down over the last 12 months**. The audience only cares about the latest status relative to target, plus direction of the trend.\n\nWhich visual should you choose?",
+      "options": [
+        {
+          "id": "a",
+          "text": "KPI visual"
+        },
+        {
+          "id": "b",
+          "text": "Gauge chart"
+        },
+        {
+          "id": "c",
+          "text": "Multi-row card"
+        },
+        {
+          "id": "d",
+          "text": "Line chart"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The KPI visual is purpose-built to show a base value, a target goal, and a trend axis, with color-coded status indicating whether the metric is on track.",
+        "whyNot": {
+          "b": "A gauge shows current value against min/max and target but does not incorporate a trend over time.",
+          "c": "A multi-row card lists several values as text but has no goal or trend evaluation.",
+          "d": "A line chart shows the trend but does not summarize status against a goal in a single indicator."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-kpi",
+      "tags": [
+        "visualization-choice",
+        "kpi"
+      ]
+    },
+    {
+      "id": "viz-rep-0004",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Apply conditional formatting",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "In a table visual showing **Profit by Region**, you want each cell's background in the Profit column to shade from red (lowest) to green (highest) based on the profit value, so outliers stand out.\n\nWhich conditional formatting option should you configure on the Profit field?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Background color, formatted by Color scale"
+        },
+        {
+          "id": "b",
+          "text": "Data bars"
+        },
+        {
+          "id": "c",
+          "text": "Icons"
+        },
+        {
+          "id": "d",
+          "text": "Web URL"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Background color conditional formatting using a color scale (gradient) shades each cell along a min-to-max color ramp based on the field value, which is exactly the red-to-green heat effect requested.",
+        "whyNot": {
+          "b": "Data bars draw a proportional bar inside the cell rather than shading the cell background across a color gradient.",
+          "c": "Icons place a small indicator (such as arrows or KPI symbols) but do not shade the cell background as a gradient.",
+          "d": "Web URL formatting turns cell text into a clickable link and has nothing to do with color shading."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting",
+      "tags": [
+        "conditional-formatting",
+        "table"
+      ]
+    },
+    {
+      "id": "viz-rep-0005",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Apply conditional formatting",
+      "type": "dropdown",
+      "difficulty": 2,
+      "stem": "A finance table lists accounts with a **Variance** column. You must show a red down-arrow when variance is negative and a green up-arrow when positive, without changing the cell background.\n\nComplete the sentence by choosing the correct option: To achieve this you should apply conditional formatting of type **[ ... ]** to the Variance column.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Icons"
+        },
+        {
+          "id": "b",
+          "text": "Background color"
+        },
+        {
+          "id": "c",
+          "text": "Font color"
+        },
+        {
+          "id": "d",
+          "text": "Data bars"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Icons conditional formatting option displays rule-based indicator icons (such as directional arrows) next to values, and rules can be set on the numeric value to choose red/green up/down arrows.",
+        "whyNot": {
+          "b": "Background color shades the cell fill and would not add directional arrows.",
+          "c": "Font color changes the text color only; it produces no arrow icons.",
+          "d": "Data bars draw proportional bars in the cell rather than status arrows."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting",
+      "tags": [
+        "conditional-formatting",
+        "icons"
+      ]
+    },
+    {
+      "id": "viz-rep-0006",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Configure filter scope",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "A report has three pages. You add a filter on **Fiscal Year = 2025** to the *Filters on this page* section of the Overview page only. The Detail and Trends pages must remain unaffected.\n\nWhat is the effect of this configuration?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Only visuals on the Overview page are filtered to Fiscal Year 2025; the other pages are unaffected."
+        },
+        {
+          "id": "b",
+          "text": "All visuals on all three pages are filtered to Fiscal Year 2025."
+        },
+        {
+          "id": "c",
+          "text": "Only the single selected visual on the Overview page is filtered."
+        },
+        {
+          "id": "d",
+          "text": "No visuals are filtered until you also add the field to each visual."
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "A filter placed in the *Filters on this page* bucket applies to every visual on that one page only, so just the Overview page is filtered to 2025.",
+        "whyNot": {
+          "b": "A report-level filter (Filters on all pages) would affect all pages; a page-level filter does not.",
+          "c": "A visual-level filter (Filters on this visual) affects a single visual; the page-level scope affects the whole page.",
+          "d": "Page-level filters take effect immediately across the page without adding the field to each visual."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-report-filter-types",
+      "tags": [
+        "filters",
+        "filter-scope"
+      ]
+    },
+    {
+      "id": "viz-rep-0007",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Configure filter scope",
+      "type": "dragdrop",
+      "difficulty": 3,
+      "stem": "Match each filtering requirement to the correct filter scope by selecting the option that lists the correct pairings.\n\nRequirements:\n1. A currency filter that must apply to every visual on every page of the report.\n2. A filter that must apply only to the visuals on the Sales page.\n3. A filter that must restrict only one specific matrix visual.\n\nScopes available: Filters on all pages, Filters on this page, Filters on this visual.",
+      "options": [
+        {
+          "id": "a",
+          "text": "1 → Filters on all pages; 2 → Filters on this page; 3 → Filters on this visual"
+        },
+        {
+          "id": "b",
+          "text": "1 → Filters on this page; 2 → Filters on all pages; 3 → Filters on this visual"
+        },
+        {
+          "id": "c",
+          "text": "1 → Filters on this visual; 2 → Filters on this page; 3 → Filters on all pages"
+        },
+        {
+          "id": "d",
+          "text": "1 → Filters on all pages; 2 → Filters on this visual; 3 → Filters on this page"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Report-level filters (Filters on all pages) span the entire report, page-level filters (Filters on this page) affect a single page, and visual-level filters (Filters on this visual) restrict one visual only. Option A maps each requirement to the matching scope.",
+        "whyNot": {
+          "b": "It swaps the report-wide and page-only requirements, so the currency filter would not reach all pages.",
+          "c": "It inverts report and visual scopes, applying the report-wide filter to a single visual and vice versa.",
+          "d": "It assigns the page requirement to a single visual and the single-visual requirement to the whole page."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-report-filter-types",
+      "tags": [
+        "filters",
+        "filter-scope",
+        "dragdrop"
+      ]
+    },
+    {
+      "id": "viz-rep-0008",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Apply and customize themes",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "Your organization requires all reports to use a standard set of corporate colors, fonts, and default visual styles. You want to apply these consistently across an entire report in one step and reuse the definition in future reports.\n\nWhat should you do in Power BI Desktop?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Import a custom report theme (JSON file)"
+        },
+        {
+          "id": "b",
+          "text": "Manually set the colors on each visual using the Format pane"
+        },
+        {
+          "id": "c",
+          "text": "Change the page background image"
+        },
+        {
+          "id": "d",
+          "text": "Turn on high-contrast mode in Windows"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "A report theme, defined in a JSON file, sets colors, fonts, and default formatting across the whole report at once and can be imported into other reports for consistency.",
+        "whyNot": {
+          "b": "Formatting each visual manually is inconsistent, time consuming, and not reusable across reports.",
+          "c": "A background image changes only the page canvas appearance, not the color palette or default visual styles.",
+          "d": "Windows high-contrast mode is an OS accessibility setting and does not define corporate report styling."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-themes",
+      "tags": [
+        "themes",
+        "formatting"
+      ]
+    },
+    {
+      "id": "viz-rep-0009",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Design for accessibility",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "You are making a report accessible to users who rely on screen readers and to users with color-vision deficiency.\n\nWhich **two** actions directly improve accessibility? Select two.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Set the tab order of visuals in the Selection pane so screen readers read them in a logical sequence"
+        },
+        {
+          "id": "b",
+          "text": "Add alt text to each visual describing its purpose and key insight"
+        },
+        {
+          "id": "c",
+          "text": "Rely solely on color to distinguish series in every chart"
+        },
+        {
+          "id": "d",
+          "text": "Remove all titles from visuals to reduce clutter"
+        },
+        {
+          "id": "e",
+          "text": "Use a smaller font size everywhere to fit more visuals"
+        }
+      ],
+      "correct": [
+        "a",
+        "b"
+      ],
+      "explanation": {
+        "why": "Setting a logical tab order ensures screen readers traverse visuals in a meaningful sequence, and alt text gives assistive technology a spoken description of each visual. Both are recommended accessibility practices.",
+        "whyNot": {
+          "c": "Relying solely on color excludes users with color-vision deficiency; you should add markers, labels, or patterns in addition to color.",
+          "d": "Removing titles removes context that screen readers and all users depend on, reducing accessibility.",
+          "e": "Very small fonts reduce legibility for users with low vision and harm accessibility."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-accessibility-overview",
+      "tags": [
+        "accessibility",
+        "multi"
+      ]
+    },
+    {
+      "id": "viz-rep-0010",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Design for accessibility",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "A stakeholder using a screen reader opens your report and cannot understand what a particular chart represents because the reader announces only \"chart\".\n\nWhat single change best resolves this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add descriptive alt text to the visual"
+        },
+        {
+          "id": "b",
+          "text": "Increase the visual's size"
+        },
+        {
+          "id": "c",
+          "text": "Change the visual's background color"
+        },
+        {
+          "id": "d",
+          "text": "Pin the visual to a dashboard"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Alt text provides a text description that screen readers announce, giving non-sighted users the meaning and key takeaway of the visual.",
+        "whyNot": {
+          "b": "Enlarging the visual does not give a screen reader any descriptive information.",
+          "c": "Background color has no effect on what a screen reader announces.",
+          "d": "Pinning to a dashboard changes where the visual appears but does not add a spoken description."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-accessibility-creating-reports",
+      "tags": [
+        "accessibility",
+        "alt-text"
+      ]
+    },
+    {
+      "id": "viz-rep-0011",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Create a paginated report",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "The finance team needs a **pixel-perfect, multi-page invoice document** that can be exported to PDF and printed, with precise control over page breaks and a repeating header on every printed page.\n\nWhich Power BI tool should you use to build this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Power BI Report Builder (paginated report)"
+        },
+        {
+          "id": "b",
+          "text": "Power BI Desktop (interactive report)"
+        },
+        {
+          "id": "c",
+          "text": "Power BI dashboard in the service"
+        },
+        {
+          "id": "d",
+          "text": "Power Query Editor"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Paginated reports, authored in Power BI Report Builder, are designed for pixel-perfect, print-ready documents that paginate across many pages with controllable page breaks and repeating headers, ideal for invoices.",
+        "whyNot": {
+          "b": "Power BI Desktop produces interactive, screen-oriented reports that are not optimized for precise multi-page print layouts.",
+          "c": "A dashboard is a single-page collection of pinned tiles in the service, not a printable multi-page document.",
+          "d": "Power Query Editor is for transforming data, not for designing report layouts."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/paginated-reports/paginated-reports-report-builder-power-bi",
+      "tags": [
+        "paginated-report",
+        "report-builder"
+      ]
+    },
+    {
+      "id": "viz-rep-0012",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Configure slicers",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "Report users need to filter a page by selecting a **continuous date range** (a start and end date) using a draggable control.\n\nWhich slicer configuration should you use?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A slicer on a date field set to the Between (range) slider style"
+        },
+        {
+          "id": "b",
+          "text": "A slicer set to the List style"
+        },
+        {
+          "id": "c",
+          "text": "A slicer set to the Dropdown style"
+        },
+        {
+          "id": "d",
+          "text": "A card visual showing the max date"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "When a slicer is placed on a date/numeric field, Power BI offers a Between range slider that lets users drag handles to pick a start and end value, which is exactly a continuous date range control.",
+        "whyNot": {
+          "b": "The List style shows discrete selectable items and does not present a draggable range slider.",
+          "c": "The Dropdown style also lists discrete items in a collapsed menu, not a continuous range.",
+          "d": "A card only displays a value and cannot be used to filter by a range."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-slicers",
+      "tags": [
+        "slicers",
+        "date-range"
+      ]
+    },
+    {
+      "id": "viz-rep-0013",
+      "domain": "visualize",
+      "objective": "Create reports",
+      "subObjective": "Format and configure visuals",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A column chart plots monthly sales. Stakeholders want a **constant reference line at the 100,000 sales target** so months above and below the goal are obvious, and the line must automatically appear on top of the columns.\n\nWhere in Power BI Desktop do you add this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "In the Analytics pane of the visual, add a Constant line at 100,000"
+        },
+        {
+          "id": "b",
+          "text": "In the Filters pane, add a filter for values above 100,000"
+        },
+        {
+          "id": "c",
+          "text": "In Power Query, add a custom column equal to 100,000"
+        },
+        {
+          "id": "d",
+          "text": "In the Format pane, change the data colors to highlight high values"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Analytics pane lets you add reference lines such as a Constant line at a fixed value (100,000), which renders across the plot area on top of the columns.",
+        "whyNot": {
+          "b": "A filter would remove months below the target rather than draw a reference line.",
+          "c": "A Power Query column adds data but does not create a visual reference line on the chart.",
+          "d": "Changing data colors highlights columns but does not create a fixed horizontal target line."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-add-analytics",
+      "tags": [
+        "formatting",
+        "analytics-pane",
+        "reference-line"
+      ]
+    },
+    {
+      "id": "viz-enh-0014",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Configure bookmarks",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You want a single report page to toggle between a **chart view** and a **table view** of the same data when the user clicks a button, without navigating to another page.\n\nWhich features should you combine?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Two bookmarks (one showing the chart, one showing the table) with the Selection pane used to hide/show each visual, wired to buttons"
+        },
+        {
+          "id": "b",
+          "text": "Two separate report pages linked by page navigation only"
+        },
+        {
+          "id": "c",
+          "text": "A drillthrough page for each visual"
+        },
+        {
+          "id": "d",
+          "text": "Sync slicers across the pages"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Bookmarks capture the visibility state set in the Selection pane. By creating one bookmark that shows the chart and hides the table, and another that reverses it, then assigning each to a button, users toggle views on one page.",
+        "whyNot": {
+          "b": "Page navigation moves between pages; the requirement is to swap views on the same page.",
+          "c": "Drillthrough passes context to a detail page and is not a mechanism for toggling visuals in place.",
+          "d": "Sync slicers keep slicer selections consistent across pages and do not show or hide visuals."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-bookmarks",
+      "tags": [
+        "bookmarks",
+        "selection-pane"
+      ]
+    },
+    {
+      "id": "viz-enh-0015",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Design custom tooltips",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "When a user hovers over a bar in the Sales by Region chart, you want a rich pop-up showing a mini trend line and two KPIs specific to that region, instead of the default single-value tooltip.\n\nWhat should you create?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A report-page tooltip (a page set as a Tooltip) and assign it to the visual's Tooltip setting"
+        },
+        {
+          "id": "b",
+          "text": "A drillthrough page"
+        },
+        {
+          "id": "c",
+          "text": "A bookmark that shows the KPIs"
+        },
+        {
+          "id": "d",
+          "text": "A Q&A visual"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "A report-page tooltip lets you design a full mini-page of visuals that appears on hover, filtered to the data point being pointed at, enabling a trend line and KPIs in the tooltip.",
+        "whyNot": {
+          "b": "Drillthrough requires a right-click action to navigate to a detail page; it does not appear on hover as a tooltip.",
+          "c": "A bookmark captures a saved state but is not shown automatically on hover over a data point.",
+          "d": "A Q&A visual answers natural-language questions and is unrelated to hover tooltips."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-tooltips",
+      "tags": [
+        "tooltips",
+        "custom-tooltip"
+      ]
+    },
+    {
+      "id": "viz-enh-0016",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Edit interactions between visuals",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "On a page with a slicer, a column chart, and a matrix, selecting a bar in the column chart currently cross-highlights the matrix. The stakeholders want a click on the column chart to **have no effect** on the matrix, while still cross-highlighting other visuals.\n\nWhat should you configure?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use Edit interactions and set the matrix's interaction from the column chart to None"
+        },
+        {
+          "id": "b",
+          "text": "Delete the relationship between the two tables"
+        },
+        {
+          "id": "c",
+          "text": "Add a visual-level filter to the matrix"
+        },
+        {
+          "id": "d",
+          "text": "Turn off Cross-report drillthrough"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Edit interactions lets you control, per source-target pair, whether a selection filters, highlights, or does nothing. Setting the matrix to None for the column chart source stops that specific interaction while leaving others intact.",
+        "whyNot": {
+          "b": "Deleting the model relationship would break data across the whole report, not just one interaction.",
+          "c": "A visual-level filter statically restricts the matrix data; it does not stop click-driven cross-highlighting.",
+          "d": "Cross-report drillthrough concerns navigation between reports, not intra-page cross-highlighting."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/service-reports-visual-interactions",
+      "tags": [
+        "interactions",
+        "cross-highlight"
+      ]
+    },
+    {
+      "id": "viz-enh-0017",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Configure navigation",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You want a set of buttons on the report's home page that each jump directly to a specific page (Overview, Sales, Inventory) when clicked in the Power BI service.\n\nWhat is the simplest built-in way to configure these buttons?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add buttons and set each button's Action type to Page navigation, choosing the destination page"
+        },
+        {
+          "id": "b",
+          "text": "Add buttons with a Back action"
+        },
+        {
+          "id": "c",
+          "text": "Create a bookmark for each page and rely on the bookmark navigator only"
+        },
+        {
+          "id": "d",
+          "text": "Use drillthrough from the home page to each page"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Buttons support a Page navigation action where you pick the target page; clicking the button navigates there directly with no extra objects needed.",
+        "whyNot": {
+          "b": "A Back action returns to the previously viewed page rather than jumping to a chosen page.",
+          "c": "Bookmarks capture states and could navigate, but the requirement is simple page-to-page jumps, for which Page navigation is the direct built-in action.",
+          "d": "Drillthrough passes filter context to a detail page and is not a general page-jump menu."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-page-navigation",
+      "tags": [
+        "navigation",
+        "buttons"
+      ]
+    },
+    {
+      "id": "viz-enh-0018",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Sync slicers across pages",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A report has a Region slicer on the Sales page. You need the **same Region selection to automatically apply on the Inventory page**, but you do not want the slicer control itself to be visible on the Inventory page.\n\nWhat should you configure in the Sync slicers pane?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable Sync for the Inventory page but leave the Visible checkbox for that page unchecked"
+        },
+        {
+          "id": "b",
+          "text": "Enable both Sync and Visible for the Inventory page"
+        },
+        {
+          "id": "c",
+          "text": "Copy and paste the slicer onto the Inventory page without syncing"
+        },
+        {
+          "id": "d",
+          "text": "Set a report-level filter on Region and remove the slicer"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "In the Sync slicers pane each page has separate Sync and Visible checkboxes. Checking Sync (without Visible) applies the selection to that page while hiding the slicer control there.",
+        "whyNot": {
+          "b": "Enabling Visible as well would show the slicer control on the Inventory page, which the requirement forbids.",
+          "c": "A pasted, unsynced slicer maintains its own independent selection and would not follow the Sales page.",
+          "d": "A report-level filter is static and cannot be changed interactively like the synced slicer selection."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-slicers#sync-and-use-slicers-on-other-pages",
+      "tags": [
+        "slicers",
+        "sync-slicers"
+      ]
+    },
+    {
+      "id": "viz-enh-0019",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Use the Selection pane, grouping, and layering",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You have overlapping visuals used for a bookmark toggle, and you need to control which visual sits **in front** and to hide specific visuals for each bookmark state.\n\nWhich pane provides layer order (z-order) control and per-visual visibility toggles?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Selection pane"
+        },
+        {
+          "id": "b",
+          "text": "Fields pane"
+        },
+        {
+          "id": "c",
+          "text": "Filters pane"
+        },
+        {
+          "id": "d",
+          "text": "Visualizations pane"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Selection pane lists all objects on the page, lets you show or hide each one, group them, and reorder their layer (z-order), which is exactly what is needed for overlapping bookmark toggles.",
+        "whyNot": {
+          "b": "The Fields pane lists data model tables and columns, not page objects or their layer order.",
+          "c": "The Filters pane manages filters, not visibility or z-order of visuals.",
+          "d": "The Visualizations pane is used to pick visual types and format them, not to manage show/hide and layering of all objects on the page."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-selection-pane",
+      "tags": [
+        "selection-pane",
+        "layering"
+      ]
+    },
+    {
+      "id": "viz-enh-0020",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Configure drillthrough and drill down",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "From a summary page, a user should be able to **right-click a specific customer** in a chart and jump to a detail page that is automatically filtered to that customer.\n\nWhat must you set up on the detail page?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add the Customer field to the Drill through well of the detail page"
+        },
+        {
+          "id": "b",
+          "text": "Enable drill down on the summary chart"
+        },
+        {
+          "id": "c",
+          "text": "Add a Customer slicer synced across pages"
+        },
+        {
+          "id": "d",
+          "text": "Add the Customer field to the Tooltip fields of the summary chart"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Drillthrough is configured by dragging the target field (Customer) into the Drill through well on the destination page. Users can then right-click a customer on any page and drill through to the detail page filtered to that customer.",
+        "whyNot": {
+          "b": "Drill down expands hierarchy levels within the same visual; it does not navigate to a filtered detail page.",
+          "c": "A synced slicer keeps selections consistent but does not create the right-click drillthrough navigation to a context-filtered page.",
+          "d": "Adding a field to Tooltip fields affects hover tooltips, not drillthrough navigation."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-drillthrough",
+      "tags": [
+        "drillthrough",
+        "navigation"
+      ]
+    },
+    {
+      "id": "viz-enh-0021",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Configure personalized visuals",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "Business users want to **change a chart's measure and axis field themselves** while viewing a published report in the Power BI service, without editing the report, and optionally save their changes as a personal bookmark.\n\nWhat must the report author enable?",
+      "options": [
+        {
+          "id": "a",
+          "text": "The Personalize visuals report setting in Power BI Desktop (Report settings)"
+        },
+        {
+          "id": "b",
+          "text": "Row-level security roles"
+        },
+        {
+          "id": "c",
+          "text": "Q&A for the dataset"
+        },
+        {
+          "id": "d",
+          "text": "Scheduled refresh on the dataset"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Personalize visuals feature, enabled in the report's settings, lets consumers change fields, measures, aggregation, and visual type on the fly and save those changes as personal bookmarks, without modifying the published report for others.",
+        "whyNot": {
+          "b": "Row-level security restricts which rows a user can see; it does not let users reshape visuals.",
+          "c": "Q&A answers natural-language questions but does not let users personalize an existing visual's fields.",
+          "d": "Scheduled refresh updates data and has nothing to do with letting users personalize visuals."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-personalize-visuals",
+      "tags": [
+        "personalize-visuals",
+        "self-service"
+      ]
+    },
+    {
+      "id": "viz-enh-0022",
+      "domain": "visualize",
+      "objective": "Enhance reports for usability and storytelling",
+      "subObjective": "Configure bookmarks and navigation",
+      "type": "hotspot",
+      "difficulty": 2,
+      "stem": "You designed five bookmarks representing different filter states and want to give users a ready-made set of navigation arrows to step through them without manually creating one button per bookmark.\n\nFrom the choices below (imagine clicking the correct control on the ribbon/Insert menu), which control should you insert?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Insert > Buttons > Navigator > Bookmark navigator"
+        },
+        {
+          "id": "b",
+          "text": "Insert > Buttons > Blank, then manually assign each bookmark"
+        },
+        {
+          "id": "c",
+          "text": "Insert > Text box for each bookmark name"
+        },
+        {
+          "id": "d",
+          "text": "Insert > Image and hyperlink each one"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Bookmark navigator is a built-in navigator control that automatically generates a set of linked buttons for the report's bookmarks, updating as bookmarks are added or removed.",
+        "whyNot": {
+          "b": "Manually assigning bookmarks to blank buttons works but is exactly the tedious approach the requirement wants to avoid.",
+          "c": "Text boxes only display text and cannot trigger bookmark actions on their own as a navigator.",
+          "d": "Images with hyperlinks navigate to URLs, not through the report's bookmark set."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/button-navigators",
+      "tags": [
+        "bookmarks",
+        "navigation",
+        "hotspot"
+      ]
+    },
+    {
+      "id": "viz-pat-0023",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Use the Analyze feature",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "Total sales dropped sharply from May to June. You want Power BI to automatically explain **which categories contributed most to that decrease** by right-clicking the June data point.\n\nWhich feature should you use?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Analyze > Explain the decrease"
+        },
+        {
+          "id": "b",
+          "text": "Add a trend line in the Analytics pane"
+        },
+        {
+          "id": "c",
+          "text": "Create a forecast"
+        },
+        {
+          "id": "d",
+          "text": "Apply Top N filter"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Analyze feature's Explain the increase/decrease option runs automated insights on a selected data point and surfaces the categories that most drove the change, delivered as auto-generated visuals.",
+        "whyNot": {
+          "b": "A trend line summarizes overall direction but does not attribute a specific change to contributing categories.",
+          "c": "A forecast projects future values; it does not explain a past drop.",
+          "d": "A Top N filter limits which items are shown; it does not analyze the drivers of a change."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-insights",
+      "tags": [
+        "analyze",
+        "insights"
+      ]
+    },
+    {
+      "id": "viz-pat-0024",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Apply grouping, binning, and clustering",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A histogram-style analysis requires grouping a continuous **Unit Price** field into equal-width buckets of 10 dollars so you can count how many products fall in each price band.\n\nWhat should you create in Power BI Desktop?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A bin (group) on Unit Price with bin size 10"
+        },
+        {
+          "id": "b",
+          "text": "A calculated column with RANKX"
+        },
+        {
+          "id": "c",
+          "text": "A measure using AVERAGE"
+        },
+        {
+          "id": "d",
+          "text": "A what-if parameter"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Binning creates equal-width groups on a numeric or date field. Setting a bin size of 10 on Unit Price produces the 10-dollar bands needed for a histogram of product counts.",
+        "whyNot": {
+          "b": "RANKX ranks rows; it does not bucket a continuous field into equal-width bands.",
+          "c": "An AVERAGE measure computes a single statistic, not price bands.",
+          "d": "A what-if parameter creates a slicer-driven variable, not fixed value bins for grouping."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-grouping-and-binning",
+      "tags": [
+        "binning",
+        "grouping"
+      ]
+    },
+    {
+      "id": "viz-pat-0025",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Use AI visuals",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "Executives want to type plain-English questions such as \"total sales by region last year\" directly on a report page and get a visual answer instantly.\n\nWhich AI visual should you add?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Q&A visual"
+        },
+        {
+          "id": "b",
+          "text": "Key influencers visual"
+        },
+        {
+          "id": "c",
+          "text": "Decomposition tree visual"
+        },
+        {
+          "id": "d",
+          "text": "Smart narrative visual"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Q&A visual accepts natural-language questions and generates an appropriate visual answer from the model, which matches the plain-English query requirement.",
+        "whyNot": {
+          "b": "Key influencers explains what factors drive a metric; it does not answer free-form typed questions.",
+          "c": "The decomposition tree lets users interactively break a measure down by dimensions but is not a natural-language query box.",
+          "d": "Smart narrative generates written text summaries, not on-demand answers to typed questions."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-q-and-a",
+      "tags": [
+        "ai-visuals",
+        "q-and-a"
+      ]
+    },
+    {
+      "id": "viz-pat-0026",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Use AI visuals",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "An analyst wants to understand **which factors most increase the likelihood that a customer churns** and see the relative impact of each factor on that outcome.\n\nWhich AI visual is designed for this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Key influencers visual"
+        },
+        {
+          "id": "b",
+          "text": "Q&A visual"
+        },
+        {
+          "id": "c",
+          "text": "Gauge visual"
+        },
+        {
+          "id": "d",
+          "text": "Smart narrative visual"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Key influencers visual analyzes data to reveal which factors most affect a chosen metric or outcome (such as churn) and ranks their relative influence, which is precisely the requirement.",
+        "whyNot": {
+          "b": "Q&A answers typed questions but does not rank drivers of an outcome.",
+          "c": "A gauge shows progress toward a target and performs no driver analysis.",
+          "d": "Smart narrative writes descriptive text summaries rather than quantifying influence of factors."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-influencers",
+      "tags": [
+        "ai-visuals",
+        "key-influencers"
+      ]
+    },
+    {
+      "id": "viz-pat-0027",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Use AI visuals",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A manager wants to interactively **drill into total revenue and, at each level, automatically expand into the dimension that contributes the highest value** (for example, revenue then region then product), following the largest contributor down the tree.\n\nWhich AI visual supports this, including an AI \"High value\" split?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Decomposition tree visual"
+        },
+        {
+          "id": "b",
+          "text": "Key influencers visual"
+        },
+        {
+          "id": "c",
+          "text": "Line and clustered column chart"
+        },
+        {
+          "id": "d",
+          "text": "Ribbon chart"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The decomposition tree lets users break down a measure across dimensions in any order and includes AI splits such as High value, which automatically expands into the dimension with the highest contribution at each level.",
+        "whyNot": {
+          "b": "Key influencers ranks factors affecting a metric but does not provide an interactive drill-down tree.",
+          "c": "A line and clustered column chart compares values but offers no AI-driven high-value drill path.",
+          "d": "A ribbon chart shows rank changes over time, not an interactive contribution tree."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-decomposition-tree",
+      "tags": [
+        "ai-visuals",
+        "decomposition-tree"
+      ]
+    },
+    {
+      "id": "viz-pat-0028",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Use AI visuals",
+      "type": "dropdown",
+      "difficulty": 2,
+      "stem": "A report author wants an **automatically written, dynamic text summary** of the key takeaways on a page (highest values, trends) that updates as filters change.\n\nComplete the sentence: To add this, insert the **[ ... ]** visual.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Smart narrative"
+        },
+        {
+          "id": "b",
+          "text": "Decomposition tree"
+        },
+        {
+          "id": "c",
+          "text": "Key influencers"
+        },
+        {
+          "id": "d",
+          "text": "Q&A"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Smart narrative visual generates dynamic, natural-language text summarizing insights from the page or visual, and it refreshes as users filter and cross-highlight.",
+        "whyNot": {
+          "b": "The decomposition tree is an interactive drill-down visual, not a written summary.",
+          "c": "Key influencers ranks drivers of a metric rather than producing narrative text.",
+          "d": "Q&A responds to typed questions with a visual and does not auto-generate a text summary of the page."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-smart-narrative",
+      "tags": [
+        "ai-visuals",
+        "smart-narrative",
+        "dropdown"
+      ]
+    },
+    {
+      "id": "viz-pat-0029",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Configure forecasting and anomaly detection",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A line chart shows daily website visits over two years on a continuous date axis. Leadership wants Power BI to **project the next 30 days of visits with a confidence band**.\n\nWhat should you add, and what is a prerequisite?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add a Forecast in the Analytics pane; the line chart must use a single measure over a continuous time axis"
+        },
+        {
+          "id": "b",
+          "text": "Add a Constant line in the Analytics pane"
+        },
+        {
+          "id": "c",
+          "text": "Add a Trend line, which will project future values automatically"
+        },
+        {
+          "id": "d",
+          "text": "Enable anomaly detection, which forecasts future points"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "The Forecast option in the Analytics pane predicts future values with an adjustable confidence interval. It requires a line chart with a single value plotted against a continuous (date/time or numeric) axis.",
+        "whyNot": {
+          "b": "A constant line draws a fixed reference value and makes no prediction.",
+          "c": "A trend line summarizes the historical direction only; it does not produce a forecast with a confidence band.",
+          "d": "Anomaly detection flags unexpected past points; it does not project future values."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-add-analytics",
+      "tags": [
+        "forecasting",
+        "analytics-pane"
+      ]
+    },
+    {
+      "id": "viz-pat-0030",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Configure forecasting and anomaly detection",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "On a line chart of daily revenue, occasional unexpected spikes and dips appear. Stakeholders want Power BI to **automatically flag these unusual points and offer possible explanations** for each.\n\nWhich built-in capability should you enable?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Anomaly detection on the line chart"
+        },
+        {
+          "id": "b",
+          "text": "Forecast in the Analytics pane"
+        },
+        {
+          "id": "c",
+          "text": "Clustering on a scatter chart"
+        },
+        {
+          "id": "d",
+          "text": "Min and Max reference lines"
+        }
+      ],
+      "correct": [
+        "a"
+      ],
+      "explanation": {
+        "why": "Anomaly detection automatically identifies data points that fall outside the expected range on a time-series line chart and surfaces possible explanations for each detected anomaly.",
+        "whyNot": {
+          "b": "Forecasting predicts future values but does not flag anomalous historical points.",
+          "c": "Clustering groups similar items on a scatter chart; it does not detect time-series anomalies.",
+          "d": "Min and Max reference lines merely mark extremes and provide no automated anomaly explanations."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-anomaly-detection",
+      "tags": [
+        "anomaly-detection",
+        "time-series"
+      ]
+    },
+    {
+      "id": "viz-pat-0031",
+      "domain": "visualize",
+      "objective": "Identify patterns and trends",
+      "subObjective": "Create quick measures",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "An analyst without strong DAX skills needs a **month-over-month running total** and a **year-to-date total** for sales. They want Power BI to generate the DAX automatically through a guided dialog.\n\nWhich statements are correct? Select two.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Quick measures provide a guided dialog that generates the DAX for calculations such as running total and year-to-date."
+        },
+        {
+          "id": "b",
+          "text": "The DAX generated by a quick measure can be viewed and reused to learn DAX patterns."
+        },
+        {
+          "id": "c",
+          "text": "Quick measures can only be created by editing the model in Power Query."
+        },
+        {
+          "id": "d",
+          "text": "Quick measures require a paginated report license."
+        },
+        {
+          "id": "e",
+          "text": "Quick measures cannot perform time-intelligence calculations."
+        }
+      ],
+      "correct": [
+        "a",
+        "b"
+      ],
+      "explanation": {
+        "why": "Quick measures offer a guided, menu-driven way to build common calculations (including running totals and time-intelligence such as year-to-date) and automatically write the underlying DAX, which the author can inspect and learn from.",
+        "whyNot": {
+          "c": "Quick measures are created in the report/model view via the Quick measure dialog, not in Power Query.",
+          "d": "Quick measures are a standard Power BI Desktop feature and need no paginated report license.",
+          "e": "Quick measures include time-intelligence calculations such as year-to-date and month-over-month, so this is false."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-quick-measures",
+      "tags": [
+        "quick-measures",
+        "dax",
+        "multi"
+      ]
+    }
+  ]
+}

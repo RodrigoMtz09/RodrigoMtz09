@@ -1,0 +1,825 @@
+{
+  "version": "2026.04.20",
+  "domain": "model",
+  "questions": [
+    {
+      "id": "model-des-0001",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Star schema fundamentals",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You import a single wide spreadsheet named **SalesFlat** that contains order lines together with customer, product, and date attributes all in one table. Reviewers ask you to remodel the data so it follows Microsoft's recommended design for an analytical Power BI semantic model. Which design should you implement?",
+      "exhibit": "SalesFlat (flat table) columns: OrderDate, CustomerName, CustomerCity, ProductName, ProductCategory, Quantity, UnitPrice, LineTotal",
+      "options": [
+        { "id": "a", "text": "A star schema: one central fact table of order lines related to separate Customer, Product, and Date dimension tables." },
+        { "id": "b", "text": "Keep the single flat table because fewer tables always means faster queries." },
+        { "id": "c", "text": "A fully normalized (snowflake) model that splits every attribute into its own lookup table down to third normal form." },
+        { "id": "d", "text": "Several fact tables, one per attribute, with no dimension tables." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Microsoft recommends a star schema for Power BI: a central fact table holding numeric, additive events (order lines) surrounded by descriptive dimension tables (Customer, Product, Date). This structure produces simpler, faster, and more intuitive filtering.",
+        "whyNot": {
+          "b": "A single flat table repeats descriptive text on every row, inflates cardinality and model size, and is not the recommended analytic design.",
+          "c": "Snowflaking to full normalization adds relationship hops that usually hurt performance and usability; a star schema deliberately denormalizes dimensions.",
+          "d": "Attributes are descriptive dimension data, not measurable events, so they belong in dimension tables, not in multiple fact tables."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/star-schema",
+      "tags": ["star-schema", "modeling", "dimensions", "fact-table"]
+    },
+    {
+      "id": "model-des-0002",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Relationship cardinality selection",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "In your model, the **Product** dimension has one row per product (ProductKey is unique). The **Sales** fact table has many rows per product and stores ProductKey on each row. You create a relationship from Sales to Product on ProductKey. Which cardinality should Power BI use?",
+      "exhibit": "Product[ProductKey] = unique key (one row per product)\nSales[ProductKey] = repeats across many order lines",
+      "options": [
+        { "id": "a", "text": "Many-to-one (Sales many) to (Product one)" },
+        { "id": "b", "text": "One-to-one" },
+        { "id": "c", "text": "Many-to-many" },
+        { "id": "d", "text": "One-to-many with Sales on the one side" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Product[ProductKey] is unique (the one side) and Sales[ProductKey] repeats (the many side), so the relationship is many-to-one from the fact to the dimension. This is the standard fact-to-dimension relationship in a star schema and lets the dimension filter the fact.",
+        "whyNot": {
+          "b": "One-to-one requires both columns to be unique, but Sales[ProductKey] repeats across order lines.",
+          "c": "Many-to-many is only needed when neither column is unique; here Product[ProductKey] is unique, so it is unnecessary and would prevent normal single-direction filtering.",
+          "d": "Sales is the many side, not the one side, so putting Sales on the one side is incorrect."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand",
+      "tags": ["relationships", "cardinality", "many-to-one"]
+    },
+    {
+      "id": "model-des-0003",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Cross-filter direction and bidirectional risk",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A colleague sets every relationship in a star-schema model to **Both** (bidirectional) cross-filter direction \"to be safe.\" Reports then show unexpected totals and slower performance. Following Microsoft guidance, what should you generally do with cross-filter direction in a star schema?",
+      "options": [
+        { "id": "a", "text": "Keep relationships as single direction (dimension filters fact) and enable bidirectional filtering only for specific, justified cases." },
+        { "id": "b", "text": "Set all relationships to Both because it guarantees correct results everywhere." },
+        { "id": "c", "text": "Set all relationships to single direction from fact to dimension so the fact filters the dimensions." },
+        { "id": "d", "text": "Remove all relationships and use DAX to relate tables at query time." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "The recommended default is single-direction filtering where the dimension filters the fact. Bidirectional filtering should be applied selectively (for example, certain many-to-many or dimension-to-dimension scenarios) because applying it everywhere can create ambiguous filter paths, wrong results, and extra query cost.",
+        "whyNot": {
+          "b": "Both does not guarantee correctness; it can introduce ambiguity and incorrect aggregations and degrade performance.",
+          "c": "In a star schema the dimension should filter the fact, not the reverse; a fact filtering a dimension is not the standard single-direction design.",
+          "d": "Removing relationships and simulating them in DAX is far more complex and slower than defining proper model relationships."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/relationships-bidirectional-filtering",
+      "tags": ["cross-filter-direction", "bidirectional", "relationships"]
+    },
+    {
+      "id": "model-des-0004",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Role-playing dimensions and inactive relationships",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "Your **Sales** fact table has both an **OrderDate** and a **ShipDate**. You want a single **Date** dimension to filter by either date, and you want most visuals to use OrderDate by default but occasionally analyze by ShipDate in specific measures. What is the recommended approach?",
+      "options": [
+        { "id": "a", "text": "Create two relationships from Sales to Date (one active on OrderDate, one inactive on ShipDate) and activate the inactive one inside measures with USERELATIONSHIP." },
+        { "id": "b", "text": "Create two active relationships from Sales to Date on OrderDate and ShipDate simultaneously." },
+        { "id": "c", "text": "Duplicate every measure and hard-code a slicer to switch dates, with no model relationships to Date." },
+        { "id": "d", "text": "Merge OrderDate and ShipDate into one column so only a single relationship is needed." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "This is the role-playing dimension pattern. Only one relationship between two tables can be active, so you keep OrderDate active and ShipDate inactive, then use CALCULATE with USERELATIONSHIP to invoke the inactive ShipDate relationship inside specific measures.",
+        "whyNot": {
+          "b": "Power BI does not allow two active relationships between the same pair of tables; the second must be inactive.",
+          "c": "Removing relationships and duplicating measures with manual switching is far more error-prone than USERELATIONSHIP.",
+          "d": "Merging the two dates destroys the distinction between order and ship dates that the requirement needs."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/userelationship-function-dax",
+      "tags": ["role-playing-dimension", "inactive-relationship", "USERELATIONSHIP"]
+    },
+    {
+      "id": "model-des-0005",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Date table requirements for time intelligence",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "You are building a dedicated **Date** table and marking it as the model's date table so DAX time-intelligence functions work correctly. Which of the following are requirements or recommendations for that date table? **Select all that apply.**",
+      "options": [
+        { "id": "a", "text": "The date column must contain unique values with no gaps, covering every day within the range used by the model." },
+        { "id": "b", "text": "The date column must be of data type Date (or Date/Time)." },
+        { "id": "c", "text": "You should mark the table as a date table so functions like TOTALYTD and DATESYTD have a reliable date reference." },
+        { "id": "d", "text": "The date column values must all fall on the first day of each month only." },
+        { "id": "e", "text": "The table may safely omit dates in the middle of the range as long as the first and last dates are present." }
+      ],
+      "correct": ["a", "b", "c"],
+      "explanation": {
+        "why": "A valid date table needs a contiguous, gap-free set of unique dates of Date/Date-Time type spanning the full model range, and marking it as the date table gives time-intelligence functions a dependable reference. These conditions let functions like TOTALYTD and SAMEPERIODLASTYEAR shift and compare periods correctly.",
+        "whyNot": {
+          "d": "The table must include every day, not just month-start dates; daily granularity with no gaps is required.",
+          "e": "Gaps in the middle of the range break time-intelligence calculations; every date in the range must be present."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/model-date-tables",
+      "tags": ["date-table", "time-intelligence", "mark-as-date-table"]
+    },
+    {
+      "id": "model-des-0006",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Hierarchies for drill-down",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "Business users want to drill from **Category** to **Subcategory** to **Product** inside a single visual with one click. All three columns live in the Product dimension. What should you create in the model?",
+      "options": [
+        { "id": "a", "text": "A hierarchy in the Product table ordered Category > Subcategory > Product." },
+        { "id": "b", "text": "Three separate measures, one per level." },
+        { "id": "c", "text": "A calculation group with three calculation items." },
+        { "id": "d", "text": "A bidirectional relationship between Product and Sales." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A hierarchy groups related columns into ordered levels (Category > Subcategory > Product) so a single visual supports expand/drill-down. It is the correct modeling object for natural drill paths within one dimension.",
+        "whyNot": {
+          "b": "Measures aggregate values; they do not create drill-down levels for grouping columns.",
+          "c": "Calculation groups apply reusable calculation logic across measures; they do not define a drill hierarchy of columns.",
+          "d": "A bidirectional relationship changes filter propagation and does nothing to enable column drill-down."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/star-schema",
+      "tags": ["hierarchy", "drill-down", "dimension"]
+    },
+    {
+      "id": "model-des-0007",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Calculated column vs measure choice",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You need a **Profit** value equal to `Sales[Amount] - Sales[Cost]` that (1) must always reflect the current filters and slicers in each visual, and (2) should not permanently increase the model's storage. Should you use a calculated column or a measure, and why?",
+      "options": [
+        { "id": "a", "text": "A measure, because it is evaluated at query time in the current filter context and stores no per-row values in the model." },
+        { "id": "b", "text": "A calculated column, because it is recalculated every time a slicer changes." },
+        { "id": "c", "text": "A calculated column, because measures cannot subtract two columns." },
+        { "id": "d", "text": "Either one behaves identically, so pick whichever is easier to type." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A measure is computed at query time within the visual's filter context and is not materialized row-by-row, so it responds to slicers and adds negligible storage. This matches both requirements: filter responsiveness and no per-row storage cost.",
+        "whyNot": {
+          "b": "A calculated column is computed at data refresh, stored on every row, and does not recompute when a slicer changes.",
+          "c": "Measures can subtract columns using aggregations such as SUMX(Sales, Sales[Amount] - Sales[Cost]); the claim is false.",
+          "d": "They behave very differently: columns are stored and static per row, measures are dynamic and virtually storage-free."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-measures",
+      "tags": ["measures", "calculated-columns", "filter-context"]
+    },
+    {
+      "id": "model-des-0008",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Calculation groups for reusable logic",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "Your model has 30 base measures (Sales, Cost, Profit, etc.). Stakeholders want each one available as **Current**, **Year-to-Date**, and **Prior Year** without you authoring 90 separate measures. Which model feature solves this most efficiently?",
+      "options": [
+        { "id": "a", "text": "A calculation group with calculation items for Current, YTD, and Prior Year using SELECTEDMEASURE()." },
+        { "id": "b", "text": "Ninety individually authored measures, three per base measure." },
+        { "id": "c", "text": "A single measure that hard-codes one time-intelligence expression for all cases." },
+        { "id": "d", "text": "A bidirectional relationship from the Date table to every fact table." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A calculation group lets you define the time-intelligence logic once (using SELECTEDMEASURE to wrap whichever measure is in context) and apply it to all 30 measures, avoiding a measure explosion. This is exactly the reuse scenario calculation groups are designed for.",
+        "whyNot": {
+          "b": "Authoring 90 measures is the manual explosion the calculation group is meant to eliminate; it is far harder to maintain.",
+          "c": "A single hard-coded measure cannot generically transform 30 different base measures into three variants each.",
+          "d": "Bidirectional relationships change filtering, not measure reuse, and do not generate YTD/Prior-Year variants."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculation-groups",
+      "tags": ["calculation-groups", "SELECTEDMEASURE", "reuse"]
+    },
+    {
+      "id": "model-des-0009",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Benefits of star schema design",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "Leadership asks why you are converting a large flat table into a star schema. Which of the following are genuine benefits of a star schema in Power BI? **Select all that apply.**",
+      "options": [
+        { "id": "a", "text": "Simpler, more predictable filter propagation from dimensions to the fact table." },
+        { "id": "b", "text": "Reduced storage because descriptive text is stored once per dimension member instead of on every fact row." },
+        { "id": "c", "text": "More intuitive fields for report authors, grouped by business entity (Customer, Product, Date)." },
+        { "id": "d", "text": "It removes the need to ever write any DAX measures." },
+        { "id": "e", "text": "It guarantees a DirectQuery model will always outperform an Import model." }
+      ],
+      "correct": ["a", "b", "c"],
+      "explanation": {
+        "why": "A star schema gives clean single-direction filtering from dimensions to the fact, stores descriptive attributes once per member (lower cardinality and size), and organizes fields by business entity for easier authoring. These are the core reasons Microsoft recommends it.",
+        "whyNot": {
+          "d": "You still author measures for aggregations and business logic; the schema shape does not remove that need.",
+          "e": "Storage mode performance depends on many factors; a star schema does not make DirectQuery inherently faster than Import."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/star-schema",
+      "tags": ["star-schema", "benefits", "modeling"]
+    },
+    {
+      "id": "model-des-0010",
+      "domain": "model",
+      "objective": "Design and implement a semantic model",
+      "subObjective": "Choosing cardinality in the relationship editor",
+      "type": "dropdown",
+      "difficulty": 1,
+      "stem": "In the **Manage relationships** dialog you connect **Sales[SalesRepID]** (repeats on many rows) to **Employee[SalesRepID]** (unique). From the Cardinality dropdown you must pick the correct setting. Which value should you select from the dropdown?",
+      "exhibit": "Cardinality dropdown choices: Many-to-one, One-to-one, One-to-many, Many-to-many",
+      "options": [
+        { "id": "a", "text": "Many-to-one (*:1) — Sales is many, Employee is one" },
+        { "id": "b", "text": "One-to-one (1:1)" },
+        { "id": "c", "text": "One-to-many (1:*) — Sales is one, Employee is many" },
+        { "id": "d", "text": "Many-to-many (*:*)" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Sales[SalesRepID] repeats (many side) and Employee[SalesRepID] is unique (one side), so the correct dropdown choice is Many-to-one from Sales to Employee. Power BI usually detects this automatically based on distinct values.",
+        "whyNot": {
+          "b": "One-to-one needs both key columns to be unique; Sales[SalesRepID] is not unique.",
+          "c": "This reverses the sides; Sales is the many side, not the one side.",
+          "d": "Many-to-many is only appropriate when neither side is unique; Employee[SalesRepID] is unique here."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand",
+      "tags": ["cardinality", "relationships", "manage-relationships"]
+    },
+    {
+      "id": "model-dax-0011",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "CALCULATE with ALL to compute % of total",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You want a measure that returns each category's share of the grand total of sales, so that in a bar chart filtered to any single category the denominator still reflects **all** categories. Which measure is correct?",
+      "exhibit": "Base measure: Total Sales = SUM(Sales[Amount])",
+      "options": [
+        { "id": "a", "text": "```DAX\n% of Total =\nDIVIDE(\n    [Total Sales],\n    CALCULATE([Total Sales], ALL(Product[Category]))\n)\n```" },
+        { "id": "b", "text": "```DAX\n% of Total =\nDIVIDE([Total Sales], [Total Sales])\n```" },
+        { "id": "c", "text": "```DAX\n% of Total =\nDIVIDE([Total Sales], CALCULATE([Total Sales], KEEPFILTERS(Product[Category])))\n```" },
+        { "id": "d", "text": "```DAX\n% of Total =\nDIVIDE([Total Sales], SUM(Product[Category]))\n```" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "ALL(Product[Category]) removes the category filter from the denominator, so CALCULATE returns the grand total across all categories while the numerator stays filtered to the current category. DIVIDE then yields each category's share of the whole.",
+        "whyNot": {
+          "b": "Dividing a value by itself always returns 100%; there is no unfiltered denominator.",
+          "c": "KEEPFILTERS preserves the existing category filter rather than removing it, so the denominator stays restricted to the current category.",
+          "d": "SUM over a text column (Product[Category]) is invalid and does not produce a total sales denominator."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/all-function-dax",
+      "tags": ["CALCULATE", "ALL", "percent-of-total"]
+    },
+    {
+      "id": "model-dax-0012",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "KEEPFILTERS to intersect filters",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A report is filtered by a slicer to **Category = \"Bikes\"**. You write `CALCULATE([Total Sales], KEEPFILTERS(Product[Category] = \"Accessories\"))`. What value does this measure return in that filtered context, and why?",
+      "options": [
+        { "id": "a", "text": "Blank (or zero), because KEEPFILTERS intersects the new condition with the existing Bikes filter, and no rows are both Bikes and Accessories." },
+        { "id": "b", "text": "Total sales for Accessories, because CALCULATE always overwrites the outer filter." },
+        { "id": "c", "text": "Total sales for both Bikes and Accessories combined." },
+        { "id": "d", "text": "An error, because KEEPFILTERS cannot take a Boolean filter expression." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Normally a CALCULATE Boolean filter replaces the existing filter on that column, but KEEPFILTERS makes the new condition intersect with the current context instead. Bikes AND Accessories select no rows, so the result is blank.",
+        "whyNot": {
+          "b": "Without KEEPFILTERS, CALCULATE would overwrite to Accessories; KEEPFILTERS specifically prevents that overwrite.",
+          "c": "KEEPFILTERS intersects (AND), it does not union (OR) the two categories together.",
+          "d": "KEEPFILTERS validly accepts a Boolean filter expression; no error occurs."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/keepfilters-function-dax",
+      "tags": ["KEEPFILTERS", "CALCULATE", "filter-context"]
+    },
+    {
+      "id": "model-dax-0013",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "REMOVEFILTERS to clear context",
+      "type": "dropdown",
+      "difficulty": 2,
+      "stem": "You need the denominator of a share calculation to ignore **every** filter currently applied to the Product table (category, subcategory, and color slicers). From the dropdown of modifier functions, which single function should you place inside CALCULATE to clear all filters on the Product table?",
+      "exhibit": "Dropdown of modifiers: REMOVEFILTERS(Product), KEEPFILTERS(Product), USERELATIONSHIP(...), VALUES(Product)",
+      "options": [
+        { "id": "a", "text": "REMOVEFILTERS(Product)" },
+        { "id": "b", "text": "KEEPFILTERS(Product)" },
+        { "id": "c", "text": "VALUES(Product)" },
+        { "id": "d", "text": "USERELATIONSHIP(Product[Key], Sales[Key])" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "REMOVEFILTERS(Product) clears all filters applied to every column of the Product table, which is what an all-up denominator needs. It is the modern, readable equivalent of ALL used purely to remove filters.",
+        "whyNot": {
+          "b": "KEEPFILTERS preserves and intersects existing filters rather than removing them.",
+          "c": "VALUES returns the list of values in the current context; it is a table function, not a filter-removal modifier.",
+          "d": "USERELATIONSHIP activates an inactive relationship and does nothing to clear column filters."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/removefilters-function-dax",
+      "tags": ["REMOVEFILTERS", "CALCULATE", "filter-modifiers"]
+    },
+    {
+      "id": "model-dax-0014",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Year-over-year with SAMEPERIODLASTYEAR",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You have a marked Date table related to Sales. You need **Sales for the same period in the prior year** so you can compute year-over-year growth. Which measure returns the prior-year value correctly?",
+      "exhibit": "Total Sales = SUM(Sales[Amount]); Date table is marked as a date table",
+      "options": [
+        { "id": "a", "text": "```DAX\nSales PY =\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR('Date'[Date]))\n```" },
+        { "id": "b", "text": "```DAX\nSales PY =\nCALCULATE([Total Sales], PREVIOUSDAY('Date'[Date]))\n```" },
+        { "id": "c", "text": "```DAX\nSales PY =\n[Total Sales] - 365\n```" },
+        { "id": "d", "text": "```DAX\nSales PY =\nCALCULATE([Total Sales], ALL('Date'))\n```" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "SAMEPERIODLASTYEAR shifts the dates in the current filter context back exactly one year, so wrapping [Total Sales] in CALCULATE with it returns the matching prior-year value for whatever period is displayed.",
+        "whyNot": {
+          "b": "PREVIOUSDAY returns the single day before the current context, not the same period one year earlier.",
+          "c": "Subtracting 365 from a sales amount is arithmetic nonsense and does not shift the date context.",
+          "d": "ALL('Date') removes all date filters and returns the all-time total, not the prior-year period."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax",
+      "tags": ["time-intelligence", "SAMEPERIODLASTYEAR", "year-over-year"]
+    },
+    {
+      "id": "model-dax-0015",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Context transition in a calculated column",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "Given the **Orders** table below, you add the calculated column `CustomerTotal = CALCULATE(SUM(Orders[Sales]))`. Because CALCULATE performs context transition, what value appears in **CustomerTotal for the first Ann row**?",
+      "exhibit": "Orders\n\n| Customer | Sales |\n|----------|-------|\n| Ann      | 100   |\n| Ann      | 300   |\n| Bob      | 200   |",
+      "options": [
+        { "id": "a", "text": "400" },
+        { "id": "b", "text": "100" },
+        { "id": "c", "text": "600" },
+        { "id": "d", "text": "300" }
+      ],
+      "correct": ["b"],
+      "explanation": {
+        "why": "Context transition converts the row context into a filter on EVERY column of that row, not just Customer. For the first Ann row the transitioned filter is Customer=\"Ann\" AND Sales=100. This table has no unique key, so that combined filter matches only that one row, and the measure returns 100. To get Ann's true total (400) the transition would need to filter on Customer alone — which requires a unique row identifier (or grouping by Customer in a visual), so that the Sales value is not also part of the filter.",
+        "whyNot": {
+          "a": "400 (100 + 300) is Ann's total, which you would get only if the transition filtered on Customer alone. Because context transition also filters on Sales=100, the second Ann row (Sales=300) is excluded.",
+          "c": "600 is the grand total of all rows; context transition adds filters, it does not remove them, so the calculated column is never the whole-table total.",
+          "d": "300 is the other Ann row's value; the current row context is the FIRST Ann row (Sales=100), whose transitioned filter matches Sales=100, not 300."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax",
+      "tags": ["context-transition", "CALCULATE", "calculated-column", "predict-output"]
+    },
+    {
+      "id": "model-dax-0016",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "SUMX iterator row-by-row evaluation",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "Using the **Sales** table below, evaluate the following measure. What value does it return?\n\n```DAX\nRevenue =\nSUMX(Sales, Sales[Qty] * Sales[Price])\n```",
+      "exhibit": "Sales\n\n| Qty | Price |\n|-----|-------|\n| 2   | 10    |\n| 3   | 20    |\n| 1   | 50    |",
+      "options": [
+        { "id": "a", "text": "130" },
+        { "id": "b", "text": "480" },
+        { "id": "c", "text": "80" },
+        { "id": "d", "text": "6" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "SUMX iterates row by row, multiplying Qty by Price on each row and then summing: (2*10) + (3*20) + (1*50) = 20 + 60 + 50 = 130.",
+        "whyNot": {
+          "b": "480 is SUM(Qty) * SUM(Price) = 6 * 80, which multiplies the totals instead of computing per-row products.",
+          "c": "80 is only SUM(Price) and ignores quantities and the multiplication entirely.",
+          "d": "6 is only SUM(Qty); it ignores price and the row-level multiplication."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sumx-function-dax",
+      "tags": ["SUMX", "iterator", "row-context", "predict-output"]
+    },
+    {
+      "id": "model-dax-0017",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "AVERAGEX over an expression",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "Using the same **Sales** table, evaluate `Avg Line Revenue = AVERAGEX(Sales, Sales[Qty] * Sales[Price])`. What value does it return (rounded to two decimals)?",
+      "exhibit": "Sales\n\n| Qty | Price |\n|-----|-------|\n| 2   | 10    |\n| 3   | 20    |\n| 1   | 50    |\n\nRow revenues: 20, 60, 50",
+      "options": [
+        { "id": "a", "text": "43.33" },
+        { "id": "b", "text": "130.00" },
+        { "id": "c", "text": "160.00" },
+        { "id": "d", "text": "26.67" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "AVERAGEX computes the per-row expression (20, 60, 50) and averages the three results: (20 + 60 + 50) / 3 = 130 / 3 = 43.33.",
+        "whyNot": {
+          "b": "130 is the SUMX total, not the average across the three rows.",
+          "c": "160 = 480/3 would be the average of SUM(Qty)*SUM(Price) mishandled; it does not match the per-row averaging.",
+          "d": "26.67 = 80/3 averages only the prices' total incorrectly and ignores quantities."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/averagex-function-dax",
+      "tags": ["AVERAGEX", "iterator", "predict-output"]
+    },
+    {
+      "id": "model-dax-0018",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Variables with VAR and RETURN",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You are optimizing a measure that references the same sub-expression multiple times and want to improve readability and avoid recomputing it. Which rewrite correctly uses variables?",
+      "exhibit": "Original: YoY % = DIVIDE([Sales] - CALCULATE([Sales], SAMEPERIODLASTYEAR('Date'[Date])), CALCULATE([Sales], SAMEPERIODLASTYEAR('Date'[Date])))",
+      "options": [
+        { "id": "a", "text": "```DAX\nYoY % =\nVAR PY = CALCULATE([Sales], SAMEPERIODLASTYEAR('Date'[Date]))\nRETURN DIVIDE([Sales] - PY, PY)\n```" },
+        { "id": "b", "text": "```DAX\nYoY % =\nVAR PY = CALCULATE([Sales], SAMEPERIODLASTYEAR('Date'[Date]))\nDIVIDE([Sales] - PY, PY)\n```" },
+        { "id": "c", "text": "```DAX\nYoY % =\nRETURN DIVIDE([Sales] - PY, PY)\nVAR PY = CALCULATE([Sales], SAMEPERIODLASTYEAR('Date'[Date]))\n```" },
+        { "id": "d", "text": "```DAX\nYoY % =\nVAR PY = CALCULATE([Sales], SAMEPERIODLASTYEAR('Date'[Date]))\nRETURN PY = DIVIDE([Sales] - PY, PY)\n```" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A variable is declared with VAR, and the expression that uses it must follow a single RETURN. Option a defines PY once and returns the DIVIDE that reuses it, improving readability and evaluating the prior-year value a single time.",
+        "whyNot": {
+          "b": "It omits the required RETURN keyword before the final expression, so the syntax is invalid.",
+          "c": "RETURN must come after the VAR declarations, not before them; this ordering is invalid.",
+          "d": "Reassigning PY inside RETURN is invalid; variables are immutable and RETURN takes one expression, not an assignment."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/var-dax",
+      "tags": ["variables", "VAR", "RETURN", "readability"]
+    },
+    {
+      "id": "model-dax-0019",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Semi-additive measures (closing balance)",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "You track daily inventory **on-hand quantity** in a snapshot fact table. Summing on-hand across dates is meaningless (you would add the same stock repeatedly), but summing across products on a given date is valid. For a monthly report you need the on-hand quantity **as of the last date in each period**. Which measure is appropriate for this semi-additive value?",
+      "options": [
+        { "id": "a", "text": "```DAX\nClosing On Hand =\nCALCULATE(SUM(Inventory[OnHand]), LASTDATE('Date'[Date]))\n```" },
+        { "id": "b", "text": "```DAX\nClosing On Hand =\nSUM(Inventory[OnHand])\n```" },
+        { "id": "c", "text": "```DAX\nClosing On Hand =\nAVERAGE(Inventory[OnHand])\n```" },
+        { "id": "d", "text": "```DAX\nClosing On Hand =\nCALCULATE(SUM(Inventory[OnHand]), ALL('Date'))\n```" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "On-hand quantity is semi-additive: additive across products but not across time. Wrapping SUM in CALCULATE with LASTDATE restricts the date filter to the final date of the current period, giving the correct closing balance.",
+        "whyNot": {
+          "b": "A plain SUM adds on-hand across all dates in the period, double-counting the same stock over time.",
+          "c": "AVERAGE returns a mean across snapshots, which is neither the closing balance nor a meaningful stock figure.",
+          "d": "ALL('Date') removes the date filter entirely and sums across the whole model timeline, worsening the double-counting."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/lastdate-function-dax",
+      "tags": ["semi-additive", "LASTDATE", "closing-balance", "inventory"]
+    },
+    {
+      "id": "model-dax-0020",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Implicit vs explicit measures",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "A report author drags the numeric column **Sales[Amount]** onto a visual and Power BI auto-aggregates it as Sum. A reviewer says the model should instead expose a governed, reusable **explicit measure**. What distinguishes an explicit measure from this implicit aggregation?",
+      "options": [
+        { "id": "a", "text": "An explicit measure is a named measure you author with a DAX expression (for example Total Sales = SUM(Sales[Amount])), giving reusable, controlled logic; the implicit one is the automatic column aggregation." },
+        { "id": "b", "text": "An explicit measure is any column you rename; implicit measures are columns you hide." },
+        { "id": "c", "text": "There is no functional difference; both are stored per row in the model." },
+        { "id": "d", "text": "An explicit measure can only be a calculated column, not a measure." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "An explicit measure is one you deliberately define with a DAX formula and a name, so it is reusable, testable, and centrally governed. An implicit measure is the automatic aggregation Power BI applies when a numeric column is dropped on a visual.",
+        "whyNot": {
+          "b": "Renaming or hiding columns has nothing to do with explicit versus implicit measures.",
+          "c": "They differ meaningfully; measures are evaluated at query time and are not stored per row like columns.",
+          "d": "An explicit measure is a measure, not a calculated column; the statement inverts the concept."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-measures",
+      "tags": ["explicit-measures", "implicit-measures", "governance"]
+    },
+    {
+      "id": "model-dax-0021",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Visual calculations",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You need a running total of Sales **within a single matrix visual**, computed across the exact rows already displayed (respecting their sort and grouping), without adding a new model measure. Which Power BI feature is designed for this?",
+      "options": [
+        { "id": "a", "text": "A visual calculation, such as RUNNINGSUM([Sales Amount]), authored on the visual itself." },
+        { "id": "b", "text": "A calculated column added to the fact table." },
+        { "id": "c", "text": "A row-level security rule filtering the Sales table." },
+        { "id": "d", "text": "A relationship with bidirectional cross-filtering to the Date table." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Visual calculations are DAX expressions defined on a specific visual that operate over the visual's already-computed result grid, making running totals and moving averages simple without adding model objects. RUNNINGSUM over the displayed axis is exactly this use case.",
+        "whyNot": {
+          "b": "A calculated column is materialized at refresh across the whole table and cannot respect a single visual's displayed rows and sort.",
+          "c": "Row-level security restricts data access; it does not compute running totals.",
+          "d": "Changing cross-filter direction affects filtering, not the in-visual running total."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-visual-calculations-overview",
+      "tags": ["visual-calculations", "running-total", "RUNNINGSUM"]
+    },
+    {
+      "id": "model-dax-0022",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "FILTER inside CALCULATE (filter context)",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "Using the **Sales** table below, evaluate the following measure. What value does it return?\n\n```DAX\nBig Sales =\nCALCULATE(\n    SUM(Sales[Amount]),\n    FILTER(Sales, Sales[Amount] > 200)\n)\n```",
+      "exhibit": "Sales\n\n| Product | Amount |\n|---------|--------|\n| A       | 100    |\n| B       | 250    |\n| C       | 400    |",
+      "options": [
+        { "id": "a", "text": "650" },
+        { "id": "b", "text": "750" },
+        { "id": "c", "text": "400" },
+        { "id": "d", "text": "250" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "FILTER returns only the rows where Amount > 200 (Product B = 250 and Product C = 400). CALCULATE then sums Amount over just those rows: 250 + 400 = 650.",
+        "whyNot": {
+          "b": "750 sums all three rows (100 + 250 + 400) and ignores the FILTER condition.",
+          "c": "400 keeps only Product C and wrongly drops Product B, which also exceeds 200.",
+          "d": "250 keeps only Product B and drops Product C, which also exceeds 200."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/filter-function-dax",
+      "tags": ["FILTER", "CALCULATE", "filter-context", "predict-output"]
+    },
+    {
+      "id": "model-dax-0023",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Context transition when a measure is inside an iterator",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "You write `Customers Above Target = COUNTROWS(FILTER(VALUES(Customer[CustomerKey]), [Total Sales] > 1000))`. Inside the FILTER, the measure [Total Sales] evaluates per customer even though CustomerKey is the only column iterated. Which DAX behavior makes [Total Sales] resolve to each customer's own sales?",
+      "options": [
+        { "id": "a", "text": "Context transition: referencing a measure inside a row context implicitly wraps it in CALCULATE, turning the current row into a filter." },
+        { "id": "b", "text": "Row context automatically becomes filter context for measures without any transition." },
+        { "id": "c", "text": "VALUES removes all filters, so [Total Sales] returns the grand total for every customer." },
+        { "id": "d", "text": "FILTER ignores measures entirely and evaluates only columns." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A measure reference is implicitly surrounded by CALCULATE, which triggers context transition: the current row of the iterated CustomerKey becomes a filter, so [Total Sales] is evaluated for that specific customer. That is why per-customer comparison works.",
+        "whyNot": {
+          "b": "Row context does not automatically act as filter context; a transition (via the implicit CALCULATE around the measure) is required.",
+          "c": "VALUES(Customer[CustomerKey]) returns the customers in context but does not force the measure to the grand total; context transition still applies per row.",
+          "d": "FILTER can and does evaluate measures; the claim that it ignores measures is false."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax",
+      "tags": ["context-transition", "iterator", "FILTER", "measures"]
+    },
+    {
+      "id": "model-dax-0024",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "CALCULATE filter modifiers behavior",
+      "type": "multi",
+      "difficulty": 3,
+      "stem": "A teammate is confused about CALCULATE filter modifiers. Which of the following statements are **true**? **Select all that apply.**",
+      "options": [
+        { "id": "a", "text": "By default, a Boolean filter argument in CALCULATE overwrites (replaces) any existing filter on that same column." },
+        { "id": "b", "text": "KEEPFILTERS changes that behavior so the new condition is added to (intersected with) the existing filter instead of replacing it." },
+        { "id": "c", "text": "REMOVEFILTERS clears filters from the specified table or columns." },
+        { "id": "d", "text": "ALL used as a CALCULATE modifier adds a brand-new restrictive filter rather than removing existing ones." },
+        { "id": "e", "text": "USERELATIONSHIP is a filter modifier that removes all filters from the fact table." }
+      ],
+      "correct": ["a", "b", "c"],
+      "explanation": {
+        "why": "A plain Boolean filter in CALCULATE replaces the current filter on that column; KEEPFILTERS instead intersects the new condition with the existing one; and REMOVEFILTERS clears filters on the given table or columns. These three describe modifier behavior accurately.",
+        "whyNot": {
+          "d": "ALL used inside CALCULATE removes filters (acts like REMOVEFILTERS on the specified scope); it does not add a restrictive filter.",
+          "e": "USERELATIONSHIP activates an inactive relationship for the calculation; it does not remove filters from the fact table."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax",
+      "tags": ["CALCULATE", "filter-modifiers", "KEEPFILTERS", "REMOVEFILTERS"]
+    },
+    {
+      "id": "model-dax-0025",
+      "domain": "model",
+      "objective": "Create model calculations by using DAX",
+      "subObjective": "Matching time-intelligence functions to needs",
+      "type": "dragdrop",
+      "difficulty": 2,
+      "stem": "Drag the correct time-intelligence function to each requirement. The three requirement slots, in order, are: **(1)** cumulative total from the start of the year to the current date; **(2)** the value for the equivalent period one year earlier; **(3)** the set of dates in the month up to and including the current date. Select the option that lists the correct function for slot 1, then slot 2, then slot 3.",
+      "exhibit": "Available functions: TOTALYTD, SAMEPERIODLASTYEAR, DATESMTD, PREVIOUSYEAR",
+      "options": [
+        { "id": "a", "text": "Slot 1 = TOTALYTD, Slot 2 = SAMEPERIODLASTYEAR, Slot 3 = DATESMTD" },
+        { "id": "b", "text": "Slot 1 = DATESMTD, Slot 2 = TOTALYTD, Slot 3 = SAMEPERIODLASTYEAR" },
+        { "id": "c", "text": "Slot 1 = SAMEPERIODLASTYEAR, Slot 2 = DATESMTD, Slot 3 = TOTALYTD" },
+        { "id": "d", "text": "Slot 1 = TOTALYTD, Slot 2 = PREVIOUSYEAR, Slot 3 = SAMEPERIODLASTYEAR" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "TOTALYTD returns a year-to-date cumulative aggregation; SAMEPERIODLASTYEAR shifts the current period back one year for a like-for-like comparison; DATESMTD returns the month-to-date set of dates. Option a maps each requirement to the right function.",
+        "whyNot": {
+          "b": "It assigns DATESMTD to the YTD cumulative slot and TOTALYTD to the prior-year slot, which are both wrong roles.",
+          "c": "It places SAMEPERIODLASTYEAR in the YTD slot and TOTALYTD in the month-to-date slot, mismatching all three.",
+          "d": "PREVIOUSYEAR returns all dates of the prior year rather than the equivalent period, so slot 2 is wrong, and slot 3 (SAMEPERIODLASTYEAR) is not month-to-date."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/totalytd-function-dax",
+      "tags": ["time-intelligence", "TOTALYTD", "DATESMTD", "dragdrop"]
+    },
+    {
+      "id": "model-opt-0026",
+      "domain": "model",
+      "objective": "Optimize model performance",
+      "subObjective": "Performance Analyzer to find slow visuals",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "A report page renders slowly and you need to find out whether a specific visual's delay comes from its DAX query, visual display, or other operations. Which built-in Power BI Desktop tool should you use first?",
+      "options": [
+        { "id": "a", "text": "Performance Analyzer, which records per-visual timings for DAX query, visual display, and other, and can copy the generated DAX query." },
+        { "id": "b", "text": "Manage roles (row-level security) dialog." },
+        { "id": "c", "text": "The Format pane's conditional formatting options." },
+        { "id": "d", "text": "Publish to the Power BI service and read the workspace usage metrics." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Performance Analyzer records how long each visual takes, broken into DAX query, visual display, and other, so you can pinpoint whether the query or rendering is the bottleneck. It also lets you copy the underlying DAX query for deeper analysis.",
+        "whyNot": {
+          "b": "Manage roles configures security, not performance measurement.",
+          "c": "Conditional formatting affects appearance, not diagnosing slow visuals.",
+          "d": "Usage metrics show adoption patterns, not the per-visual query/render breakdown you need locally."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-performance-analyzer",
+      "tags": ["performance-analyzer", "diagnostics", "optimization"]
+    },
+    {
+      "id": "model-opt-0027",
+      "domain": "model",
+      "objective": "Optimize model performance",
+      "subObjective": "Reduce cardinality to shrink the model",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "An Import model is very large. You find a **DateTime** column storing order timestamps to the second, used only for date-level reporting. It has millions of unique values. Which change best reduces model size while preserving the analysis you actually need?",
+      "options": [
+        { "id": "a", "text": "Split it into a Date column and (if needed) a separate Time column, so the high-cardinality combined values are removed and column compression improves." },
+        { "id": "b", "text": "Change the visuals' theme to a darker color to reduce rendering load." },
+        { "id": "c", "text": "Set the relationship to bidirectional to compress the column." },
+        { "id": "d", "text": "Keep the second-level timestamps but add more measures to offset the size." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Cardinality (number of distinct values) drives VertiPaq column size. Splitting a second-precision DateTime into a lower-cardinality Date column (and optional Time) dramatically reduces distinct values and improves compression while still supporting date-level reporting.",
+        "whyNot": {
+          "b": "Visual color themes have no effect on model storage or cardinality.",
+          "c": "Cross-filter direction changes filtering behavior; it does not compress a column or lower cardinality.",
+          "d": "Adding measures does not reduce the size of a high-cardinality column and does nothing to offset storage."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction",
+      "tags": ["cardinality", "column-size", "VertiPaq", "optimization"]
+    },
+    {
+      "id": "model-opt-0028",
+      "domain": "model",
+      "objective": "Optimize model performance",
+      "subObjective": "Techniques to reduce model size",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "You must reduce the size and improve the refresh/query performance of an Import semantic model. Which techniques align with Microsoft's data-reduction guidance? **Select all that apply.**",
+      "options": [
+        { "id": "a", "text": "Remove columns that are not used by any report or measure." },
+        { "id": "b", "text": "Filter rows to load only the history the business actually needs (for example, remove years no one reports on)." },
+        { "id": "c", "text": "Reduce column cardinality, such as splitting high-precision DateTime columns." },
+        { "id": "d", "text": "Import every raw source column just in case someone might need it later." },
+        { "id": "e", "text": "Disable Auto date/time only when you have your own date table, but never remove any columns." }
+      ],
+      "correct": ["a", "b", "c"],
+      "explanation": {
+        "why": "Removing unused columns, filtering out unneeded rows, and lowering cardinality are all core data-reduction techniques that shrink the model and speed up queries and refresh. They directly reduce what VertiPaq must store and scan.",
+        "whyNot": {
+          "d": "Importing every column speculatively inflates the model and works against data reduction; you should keep only what is needed.",
+          "e": "Disabling Auto date/time is a good practice, but the clause 'never remove any columns' contradicts the recommended removal of unused columns, making the statement false."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction",
+      "tags": ["data-reduction", "unused-columns", "row-filtering", "optimization"]
+    },
+    {
+      "id": "model-opt-0029",
+      "domain": "model",
+      "objective": "Optimize model performance",
+      "subObjective": "DAX query view for triage",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You copied a slow visual's DAX query from Performance Analyzer and want to run it repeatedly, tweak it, and compare timings inside Power BI Desktop without building visuals. Which feature lets you author and execute DAX queries against the model directly?",
+      "options": [
+        { "id": "a", "text": "DAX query view, where you can write and run DAX queries (for example EVALUATE) against the semantic model." },
+        { "id": "b", "text": "The Sync slicers pane." },
+        { "id": "c", "text": "The Selection pane." },
+        { "id": "d", "text": "The Bookmarks pane." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "DAX query view lets you author and execute DAX queries (such as EVALUATE statements) directly against the model, which is ideal for pasting a captured query, iterating on it, and triaging performance without visuals.",
+        "whyNot": {
+          "b": "Sync slicers coordinates slicers across pages; it does not run DAX queries.",
+          "c": "The Selection pane manages visual visibility and z-order, not query execution.",
+          "d": "The Bookmarks pane captures report states; it cannot author or run DAX queries."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/dax-query-view",
+      "tags": ["dax-query-view", "EVALUATE", "triage", "optimization"]
+    },
+    {
+      "id": "model-opt-0030",
+      "domain": "model",
+      "objective": "Optimize model performance",
+      "subObjective": "DirectQuery optimization",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A DirectQuery model over a large SQL source is slow because each visual sends complex queries and many round trips to the source. Following Microsoft's DirectQuery guidance, which action is most likely to improve performance?",
+      "options": [
+        { "id": "a", "text": "Optimize the source (indexing, aggregations, a star-schema relational design) and reduce the number and complexity of visuals per page so fewer, simpler queries are generated." },
+        { "id": "b", "text": "Add more visuals to each page so the source can batch all queries at once." },
+        { "id": "c", "text": "Convert every relationship to bidirectional to reduce the number of queries." },
+        { "id": "d", "text": "Increase the decimal precision of all numeric columns to help the engine." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "In DirectQuery, the source database does the work, so tuning it (indexes, pre-aggregations, a clean star schema) and limiting how many complex visuals fire queries per page directly reduces load and latency. Composite models with aggregations are also recommended for large sources.",
+        "whyNot": {
+          "b": "More visuals generate more concurrent source queries and round trips, worsening performance.",
+          "c": "Bidirectional relationships tend to add query complexity and can hurt DirectQuery performance rather than help.",
+          "d": "Higher numeric precision does not speed up DirectQuery and can increase data movement."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/directquery-model-guidance",
+      "tags": ["directquery", "optimization", "source-tuning"]
+    },
+    {
+      "id": "model-opt-0031",
+      "domain": "model",
+      "objective": "Optimize model performance",
+      "subObjective": "Interpreting Performance Analyzer output",
+      "type": "hotspot",
+      "difficulty": 2,
+      "stem": "In the Performance Analyzer pane below, a table visual is expanded to show its timing breakdown. You must select the single metric that tells you how long the semantic model took to return data for the visual (so you can decide whether to tune the DAX or the model). Which labeled entry should you click?",
+      "exhibit": "Performance Analyzer > Table visual (expanded)\n\n| Label | Value |\n|-------|-------|\n| (a) DAX query | 4,820 ms |\n| (b) Visual display | 120 ms |\n| (c) Other | 60 ms |\n| (d) Total | 5,000 ms |",
+      "options": [
+        { "id": "a", "text": "DAX query (4,820 ms)" },
+        { "id": "b", "text": "Visual display (120 ms)" },
+        { "id": "c", "text": "Other (60 ms)" },
+        { "id": "d", "text": "Total (5,000 ms)" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "The DAX query metric is the time the semantic model spent executing the query and returning results for the visual. A large DAX query value (here 4,820 ms of 5,000 ms) points you toward optimizing the DAX or the model rather than rendering.",
+        "whyNot": {
+          "b": "Visual display is the time to render the result on screen, not the model's query time.",
+          "c": "Other covers background/overhead operations such as preparing queries, not the query execution itself.",
+          "d": "Total is the sum of all phases and does not isolate the model query time you need to target."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-performance-analyzer",
+      "tags": ["performance-analyzer", "dax-query", "interpretation", "hotspot"]
+    }
+  ]
+}

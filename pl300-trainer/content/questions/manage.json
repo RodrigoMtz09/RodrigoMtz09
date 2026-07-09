@@ -1,0 +1,529 @@
+{
+  "version": "2026.04.20",
+  "domain": "manage",
+  "questions": [
+    {
+      "id": "mng-wsp-0001",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Configure workspace roles",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You manage a Power BI workspace named **Sales Analytics**. A new team member, Dana, must be able to publish reports, create and edit semantic models, and schedule refresh in the workspace. Dana must **not** be able to add or remove other users from the workspace.\n\nWhich workspace role should you assign to Dana?",
+      "options": [
+        { "id": "a", "text": "Admin" },
+        { "id": "b", "text": "Member" },
+        { "id": "c", "text": "Contributor" },
+        { "id": "d", "text": "Viewer" }
+      ],
+      "correct": ["c"],
+      "explanation": {
+        "why": "The Contributor role lets a user publish, edit, and delete content and manage scheduled refresh, but it cannot manage workspace access (add or remove users or change roles). This matches Dana's requirements exactly.",
+        "whyNot": {
+          "a": "Admin can do everything Contributor can, but it can also manage workspace access and delete the workspace, which exceeds what Dana should be allowed to do.",
+          "b": "Member can publish and edit content but can also add other users (up to Member/Contributor/Viewer) and reshare, so it grants access-management ability that Dana must not have.",
+          "d": "Viewer is read-only. It cannot publish reports, edit semantic models, or configure scheduled refresh, so Dana could not perform the required tasks."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces",
+      "tags": ["workspace", "roles", "contributor"]
+    },
+    {
+      "id": "mng-wsp-0002",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Publish and manage workspace apps",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "Your team develops reports in a workspace and distributes a **Power BI app** to 400 business users. After several development changes, you update reports and add a new report to the workspace. Business users report that they still see the old content in the app.\n\nWhat must you do so users receive the latest content through the app?",
+      "options": [
+        { "id": "a", "text": "Add each business user to the workspace as a Viewer." },
+        { "id": "b", "text": "Select **Update app** and republish the app, including the new report in the app's content list." },
+        { "id": "c", "text": "Ask each user to refresh their browser and clear the cache." },
+        { "id": "d", "text": "Turn on scheduled refresh for the new report's semantic model." }
+      ],
+      "correct": ["b"],
+      "explanation": {
+        "why": "Changes made in a workspace are not automatically pushed to an already-published app. You must select Update app and republish so the new report is included in the app content and the updated versions are delivered to app consumers.",
+        "whyNot": {
+          "a": "Adding users to the workspace bypasses the app-distribution model and gives them workspace access, but it does not update the published app that the 400 users consume.",
+          "c": "A browser refresh does not pull unpublished workspace changes into the app; the app must be updated and republished first.",
+          "d": "Scheduled refresh updates data in the semantic model. It does not publish new report content or structural changes to the app."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps",
+      "tags": ["app", "publish", "update-app"]
+    },
+    {
+      "id": "mng-wsp-0003",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Configure subscriptions",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A regional manager wants to automatically receive a snapshot of a specific report page in her inbox every Monday at 07:00, without opening the Power BI service.\n\nWhich feature should you configure to meet this requirement?",
+      "options": [
+        { "id": "a", "text": "A data alert on a dashboard tile." },
+        { "id": "b", "text": "An email subscription to the report page." },
+        { "id": "c", "text": "A scheduled refresh on the semantic model." },
+        { "id": "d", "text": "A shared link to the report with the reshare option enabled." }
+      ],
+      "correct": ["b"],
+      "explanation": {
+        "why": "Subscriptions let a user schedule an email that contains a snapshot of a specific report page (or dashboard) on a recurring schedule, delivered automatically without opening the service. This matches the Monday 07:00 delivery requirement.",
+        "whyNot": {
+          "a": "Data alerts notify a user only when a tile value crosses a defined threshold; they are event-driven, not a fixed weekly delivery of a page snapshot.",
+          "c": "Scheduled refresh updates the data behind a report on a schedule. It does not email a report snapshot to a user.",
+          "d": "A shared link grants access to open the report interactively; it does not push a scheduled snapshot to the manager's inbox."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/end-user-subscribe",
+      "tags": ["subscription", "email", "distribution"]
+    },
+    {
+      "id": "mng-wsp-0004",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Configure data alerts",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You want to be notified in the Power BI service and by email whenever total daily orders fall below 500. You have a report visual that shows total daily orders.\n\nWhat must you do before you can create a **data alert** for this metric?",
+      "options": [
+        { "id": "a", "text": "Pin the visual as a card, gauge, or KPI tile to a dashboard, then set the alert on the tile." },
+        { "id": "b", "text": "Set the alert directly on the report visual in the report canvas." },
+        { "id": "c", "text": "Create a paginated report and set the alert on a table cell." },
+        { "id": "d", "text": "Enable row-level security on the semantic model." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Data alerts are configured on dashboard tiles that are numeric card, gauge, or KPI visuals. You must first pin the visual to a dashboard as one of those tile types, then set the threshold alert on the tile.",
+        "whyNot": {
+          "b": "Data alerts cannot be created directly on a report visual in the report canvas; they require a supported dashboard tile.",
+          "c": "Paginated reports do not support data alerts, and table cells are not a valid alert target.",
+          "d": "Row-level security controls which rows a user can see; it has no role in enabling or triggering data alerts."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts",
+      "tags": ["data-alert", "dashboard", "kpi"]
+    },
+    {
+      "id": "mng-wsp-0005",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Endorse content (promote and certify)",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "Your organization uses endorsement to help users find trusted content. You need to align your governance process with how endorsement works in Power BI.\n\nWhich **two** statements about endorsement are correct? Each correct answer presents a complete solution.",
+      "options": [
+        { "id": "a", "text": "Any workspace Contributor or higher can promote content they can edit." },
+        { "id": "b", "text": "Only users defined as authorized certifiers by a Fabric/Power BI administrator can certify content." },
+        { "id": "c", "text": "Certifying content automatically applies row-level security to it." },
+        { "id": "d", "text": "Promotion and certification are the two endorsement levels available for items such as semantic models and reports." },
+        { "id": "e", "text": "Endorsement encrypts the underlying data of the semantic model." }
+      ],
+      "correct": ["b", "d"],
+      "explanation": {
+        "why": "Certification is restricted to users designated as authorized certifiers by an administrator, and the two endorsement levels are Promoted and Certified. Both statements accurately describe endorsement governance.",
+        "whyNot": {
+          "a": "Promotion requires write permission on the item, but the ability to promote is tied to edit rights on the specific item; the statement overstates it as a blanket Contributor capability across all content and is not one of the two correct governance facts being tested. Certification, not promotion, is the administrator-gated level.",
+          "c": "Endorsement is a trust label. It does not apply or configure row-level security.",
+          "e": "Endorsement does not encrypt data. Data protection is handled by sensitivity labels and platform encryption, not endorsement."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-endorse-content",
+      "tags": ["endorsement", "certify", "promote", "governance"]
+    },
+    {
+      "id": "mng-wsp-0006",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Configure scheduled refresh and gateways",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A semantic model published to the Power BI service imports data from an on-premises SQL Server database. You configure scheduled refresh, but the refresh fails with a message indicating that the data source cannot be reached.\n\nWhat is the most appropriate action to enable successful scheduled refresh?",
+      "options": [
+        { "id": "a", "text": "Install and configure an on-premises data gateway (standard mode) and map the SQL Server source to it in the semantic model's gateway settings." },
+        { "id": "b", "text": "Increase the scheduled refresh frequency to hourly." },
+        { "id": "c", "text": "Republish the report from Power BI Desktop using DirectQuery." },
+        { "id": "d", "text": "Assign the semantic model owner the Admin role in the workspace." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Cloud-based scheduled refresh cannot reach an on-premises source directly. A standard on-premises data gateway provides the secure bridge; after installing it and binding the SQL Server data source to the gateway in the semantic model settings, scheduled refresh can succeed.",
+        "whyNot": {
+          "b": "Changing the frequency does not solve connectivity; every refresh would still fail because the service cannot reach the on-premises source without a gateway.",
+          "c": "Switching to DirectQuery still requires a gateway for on-premises SQL Server, and it changes the storage model rather than fixing the refresh connectivity for an import model.",
+          "d": "Workspace roles govern content permissions, not network connectivity to an on-premises data source; changing the role does not enable refresh."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem",
+      "tags": ["scheduled-refresh", "gateway", "on-premises"]
+    },
+    {
+      "id": "mng-wsp-0007",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Create and manage dashboards",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "An executive wants a single-page canvas that combines the most important visuals from **three different reports** built on different semantic models into one at-a-glance view in the Power BI service.\n\nWhich item type should you create?",
+      "options": [
+        { "id": "a", "text": "A dashboard with tiles pinned from each report." },
+        { "id": "b", "text": "A single Power BI Desktop report page." },
+        { "id": "c", "text": "A paginated (.rdl) report." },
+        { "id": "d", "text": "A workspace app landing page." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A dashboard is a single-page canvas in the Power BI service where you can pin tiles from multiple reports built on multiple semantic models, giving an at-a-glance combined view. This is exactly the described requirement.",
+        "whyNot": {
+          "b": "A single report page in Power BI Desktop is bound to that report's model(s) and cannot pin visuals from other separate reports the way a dashboard can.",
+          "c": "Paginated reports are designed for pixel-perfect, printable operational reporting from a single dataset, not for combining tiles from multiple reports.",
+          "d": "An app landing page organizes and distributes existing content but is not the canvas for pinning individual visuals from multiple reports into one view."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboards",
+      "tags": ["dashboard", "pin", "tiles"]
+    },
+    {
+      "id": "mng-wsp-0008",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Configure workspace roles",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A workspace publishes an app to consumers, but a group of analysts also needs to open and read the reports **directly in the workspace** to validate content before the app is updated. The analysts must not be able to edit or publish anything.\n\nWhich workspace role should you assign to the analysts?",
+      "options": [
+        { "id": "a", "text": "Viewer" },
+        { "id": "b", "text": "Contributor" },
+        { "id": "c", "text": "Member" },
+        { "id": "d", "text": "Admin" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "The Viewer role grants read-only access to content in the workspace: users can view and interact with reports and dashboards but cannot edit, publish, or delete anything. This satisfies validation-in-workspace with no edit rights.",
+        "whyNot": {
+          "b": "Contributor can create, edit, and publish content, which exceeds the read-only requirement.",
+          "c": "Member can edit and publish content and manage some access, far more than read-only.",
+          "d": "Admin has full control including managing access and deleting the workspace, which is excessive for read-only validators."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces",
+      "tags": ["workspace", "roles", "viewer"]
+    },
+    {
+      "id": "mng-wsp-0009",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Manage app audiences and access",
+      "type": "dropdown",
+      "difficulty": 2,
+      "stem": "You publish a Power BI app from a workspace. Different departments should see different reports within the same app. You want to avoid maintaining separate apps.\n\nComplete the sentence by selecting the correct option: *To show different content to different groups of consumers within one published app, you configure multiple ______ and assign each report and audience its permitted users.*\n\nSelect the option that correctly completes the sentence.",
+      "options": [
+        { "id": "a", "text": "app audiences" },
+        { "id": "b", "text": "workspaces" },
+        { "id": "c", "text": "semantic models" },
+        { "id": "d", "text": "gateways" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Within a single Power BI app you can define multiple audiences, each exposing a tailored subset of the app's content to a specific set of users or security groups. This lets one app serve different departments without maintaining separate apps.",
+        "whyNot": {
+          "b": "Creating multiple workspaces means maintaining multiple apps, which is exactly what you were asked to avoid.",
+          "c": "Semantic models store and model data; they do not control which reports different consumer groups see in an app.",
+          "d": "Gateways provide connectivity to data sources and have nothing to do with tailoring app content per audience."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps",
+      "tags": ["app", "audiences", "distribution"]
+    },
+    {
+      "id": "mng-wsp-0010",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Configure scheduled refresh and gateways",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A semantic model refreshes from an on-premises source through a standard on-premises data gateway. Refresh currently works. The colleague who originally installed the gateway leaves the company, and IT wants to ensure the gateway remains manageable and that scheduled refresh continues without interruption.\n\nWhat should you do to keep the gateway manageable?",
+      "options": [
+        { "id": "a", "text": "Add at least one additional gateway admin so the gateway is not solely owned by the departing user." },
+        { "id": "b", "text": "Switch the semantic model to a personal mode gateway installed on the departing user's laptop." },
+        { "id": "c", "text": "Delete the data source and recreate it in the cloud without a gateway." },
+        { "id": "d", "text": "Change the semantic model storage mode to Import so a gateway is no longer needed." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A standard on-premises data gateway can have multiple administrators. Adding another gateway admin removes the single-owner risk so the gateway and its data source mappings stay manageable when the original installer leaves, keeping scheduled refresh working.",
+        "whyNot": {
+          "b": "Personal mode gateways are tied to a single user and typically a personal machine; relying on the departing user's laptop would break refresh once they leave.",
+          "c": "The data is on-premises, so removing the gateway would break connectivity; refresh cannot reach an on-premises source without a gateway.",
+          "d": "Import models refreshing from an on-premises source still require a gateway, so changing storage mode does not remove the gateway dependency."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem",
+      "tags": ["gateway", "admin", "scheduled-refresh"]
+    },
+    {
+      "id": "mng-wsp-0011",
+      "domain": "manage",
+      "objective": "Create and manage workspaces and items",
+      "subObjective": "Configure workspace roles",
+      "type": "dragdrop",
+      "difficulty": 3,
+      "stem": "You are documenting the minimum workspace role required for each task. In the trainer UI you drag a role onto each capability; here, select the single option that lists the correct **minimum** role for all three capabilities in order.\n\n1. Manage workspace access (add/remove users and change roles)\n2. Publish and edit reports but not manage access\n3. View and interact with content only (read-only)\n\nSelect the option whose role order matches capabilities 1, 2, and 3.",
+      "options": [
+        { "id": "a", "text": "1: Admin  2: Contributor  3: Viewer" },
+        { "id": "b", "text": "1: Member  2: Viewer  3: Contributor" },
+        { "id": "c", "text": "1: Contributor  2: Admin  3: Member" },
+        { "id": "d", "text": "1: Viewer  2: Member  3: Admin" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Managing workspace access (add/remove users, change roles) requires Admin (Member can add users only up to its own level, so Admin is the safe minimum for full access management). Publishing and editing without managing access is Contributor. Read-only interaction is Viewer. Option A maps all three correctly.",
+        "whyNot": {
+          "b": "Viewer cannot publish or edit, and Contributor is not read-only, so mapping capability 2 to Viewer and capability 3 to Contributor is reversed and incorrect.",
+          "c": "Contributor cannot manage workspace access, and Admin is more than the minimum needed for publishing/editing, so this ordering is wrong.",
+          "d": "Viewer cannot manage access and Admin is far more than needed for read-only, so every mapping in this option is incorrect."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces",
+      "tags": ["workspace", "roles", "mapping"]
+    },
+    {
+      "id": "mng-sec-0012",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Configure row-level security roles",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "Sales representatives should each see only the rows for their own region in a shared report. You plan to implement **row-level security (RLS)**.\n\nWhere do you define the RLS roles and their DAX filter rules?",
+      "options": [
+        { "id": "a", "text": "In Power BI Desktop, using Manage roles to create roles with table filter DAX expressions, then publish the model." },
+        { "id": "b", "text": "In the report's visual-level filters pane in the Power BI service." },
+        { "id": "c", "text": "In the workspace settings under Access." },
+        { "id": "d", "text": "In the on-premises data gateway configuration." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Static RLS roles and their DAX table-filter rules are defined in Power BI Desktop using Manage roles. After publishing, you map users or security groups to those roles in the Power BI service. This is the standard place to author RLS.",
+        "whyNot": {
+          "b": "Visual-level filters change what a visual displays for everyone; they do not enforce per-user data security and can be bypassed.",
+          "c": "Workspace Access assigns roles like Member or Viewer to the workspace; it does not define row-level DAX filters.",
+          "d": "The gateway handles data source connectivity, not RLS role definitions."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-rls",
+      "tags": ["rls", "roles", "power-bi-desktop"]
+    },
+    {
+      "id": "mng-sec-0013",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Manage RLS role membership",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You published a semantic model that defines an RLS role named **EU-Sales**. Membership in this role changes frequently as staff join and leave the EU sales team. You want to minimize ongoing administration when assigning users to the role.\n\nWhat should you map to the EU-Sales role in the Power BI service?",
+      "options": [
+        { "id": "a", "text": "A Microsoft Entra security group that the identity team keeps in sync with EU sales staff." },
+        { "id": "b", "text": "Each individual user account, added and removed manually as staff change." },
+        { "id": "c", "text": "The workspace Contributor role." },
+        { "id": "d", "text": "A distribution list used only for email announcements." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Mapping a Microsoft Entra security group to the RLS role means membership is managed centrally in the group; as people join or leave EU sales, updating the group automatically adjusts RLS access, minimizing per-model administration.",
+        "whyNot": {
+          "b": "Adding individual users to the role means editing the role membership every time staff change, which is exactly the ongoing administration you want to avoid.",
+          "c": "Workspace roles control content permissions, not RLS role membership; you cannot secure rows by pointing an RLS role at a workspace role.",
+          "d": "A mail distribution list is not a security group and cannot be used to assign RLS role membership for data security."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/rls-guidance",
+      "tags": ["rls", "security-group", "membership"]
+    },
+    {
+      "id": "mng-sec-0014",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Configure and validate RLS",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "You are implementing static row-level security on a semantic model that is published to a workspace. You need a reliable end-to-end process.\n\nWhich **two** actions are part of correctly implementing and validating RLS? Each correct answer presents part of the solution.",
+      "options": [
+        { "id": "a", "text": "Define roles with table filter DAX in Power BI Desktop and use **View as** to test them before publishing." },
+        { "id": "b", "text": "After publishing, assign users or security groups to the roles under the semantic model's Security settings in the service." },
+        { "id": "c", "text": "Grant users the workspace Admin role so RLS applies to them." },
+        { "id": "d", "text": "Add each RLS role as a separate workspace." },
+        { "id": "e", "text": "Enable RLS only by hiding columns in the report view." }
+      ],
+      "correct": ["a", "b"],
+      "explanation": {
+        "why": "Correct RLS implementation defines roles with DAX filters and tests them with View as in Power BI Desktop, then assigns users or security groups to those roles in the semantic model's Security settings in the service. Together these steps author and enforce RLS.",
+        "whyNot": {
+          "c": "Members of the workspace Admin (and Member/Contributor) roles are not restricted by RLS on the model in that workspace; giving users Admin would actually bypass RLS, not apply it.",
+          "d": "RLS roles are defined inside the semantic model, not as workspaces; creating workspaces per role does not implement RLS.",
+          "e": "Hiding columns in a report is cosmetic and does not restrict rows or enforce security; users can still access underlying data."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-rls",
+      "tags": ["rls", "view-as", "security-settings"]
+    },
+    {
+      "id": "mng-sec-0015",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Implement dynamic row-level security",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A single RLS role must automatically filter each user to only the rows that match their own email, without creating a separate role per user. A **UserSecurity** table maps each user's email to their allowed regions.\n\nWhich DAX filter expression on the UserSecurity table implements this **dynamic** RLS?",
+      "options": [
+        { "id": "a", "text": "[UserEmail] = USERPRINCIPALNAME()" },
+        { "id": "b", "text": "[UserEmail] = \"all\"" },
+        { "id": "c", "text": "USERNAME() = \"Admin\"" },
+        { "id": "d", "text": "[Region] = SELECTEDVALUE( 'Slicer'[Region] )" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Dynamic RLS uses functions such as USERPRINCIPALNAME() (or USERNAME()) to return the current user's identity and compare it to a security table column. Filtering UserSecurity where [UserEmail] = USERPRINCIPALNAME() restricts each user to their own mapped rows within a single role.",
+        "whyNot": {
+          "b": "Comparing to a literal \"all\" is static and would either match nothing or the same rows for everyone; it does not adapt to the signed-in user.",
+          "c": "Hardcoding USERNAME() = \"Admin\" only ever evaluates for a single named account and does not dynamically filter each user to their own rows.",
+          "d": "A slicer selection is a user-changeable report interaction, not a security boundary; it cannot enforce per-user data security and is not a valid RLS rule."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-rls",
+      "tags": ["rls", "dynamic", "userprincipalname", "dax"]
+    },
+    {
+      "id": "mng-sec-0016",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Manage access to semantic models",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "Analysts in another workspace need to build their own new reports on top of a certified semantic model you own, but they should **not** be able to edit the model itself.\n\nWhich **two** actions let them create reports against your semantic model with least privilege? Each correct answer presents part of the solution.",
+      "options": [
+        { "id": "a", "text": "Grant them the **Build** permission on the semantic model." },
+        { "id": "b", "text": "Share the semantic model (or let them discover it) so they can connect from Power BI Desktop or the service." },
+        { "id": "c", "text": "Add them as Members of the workspace that hosts the semantic model." },
+        { "id": "d", "text": "Give them Admin on the workspace that hosts the semantic model." },
+        { "id": "e", "text": "Assign them an RLS role that has no filters." }
+      ],
+      "correct": ["a", "b"],
+      "explanation": {
+        "why": "Build permission on a semantic model allows a user to create new content (reports, dashboards, and to connect via Analyze in Excel) on top of the model without editing it. Granting Build and making the model accessible/discoverable to them provides least-privilege report-building.",
+        "whyNot": {
+          "c": "Making them workspace Members grants edit and publish rights to the model and other items, which exceeds least privilege and lets them modify the model.",
+          "d": "Workspace Admin is even broader, allowing full control including deleting the workspace and managing access, far beyond building reports.",
+          "e": "An empty RLS role governs which rows are visible; it neither grants the ability to build reports nor is required for report creation."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/connect-data/service-datasets-permissions",
+      "tags": ["semantic-model", "build-permission", "least-privilege"]
+    },
+    {
+      "id": "mng-sec-0017",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Apply sensitivity labels",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "Your governance team wants Power BI reports and semantic models classified with organizational labels such as **Confidential** so that protection settings (like encryption) can follow the data when it is exported to Excel or PDF.\n\nWhich feature should you apply to the Power BI items?",
+      "options": [
+        { "id": "a", "text": "Microsoft Purview Information Protection sensitivity labels." },
+        { "id": "b", "text": "Endorsement (Promoted/Certified)." },
+        { "id": "c", "text": "Row-level security roles." },
+        { "id": "d", "text": "Workspace Viewer role." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Sensitivity labels (from Microsoft Purview Information Protection) classify Power BI content with labels such as Confidential and can carry protection, including encryption, into supported exports like Excel and PDF. This matches the classification-and-protection requirement.",
+        "whyNot": {
+          "b": "Endorsement signals trust and quality (Promoted/Certified) but applies no classification or protection that persists on export.",
+          "c": "Row-level security limits which rows a user sees within the model; it does not classify items or protect exported files.",
+          "d": "The Viewer role controls read access within a workspace and provides no data classification or export protection."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/enterprise/service-security-sensitivity-label-overview",
+      "tags": ["sensitivity-labels", "classification", "protection"]
+    },
+    {
+      "id": "mng-sec-0018",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Understand object-level security",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A semantic model contains a **Salary** column and an **Employee Compensation** table that only HR should be able to see. Non-HR users must not even be aware these objects exist; the fields should not appear in the fields list, and referencing them should error for those users.\n\nWhich security capability meets this requirement?",
+      "options": [
+        { "id": "a", "text": "Object-level security (OLS) that restricts specific tables and columns per role." },
+        { "id": "b", "text": "Row-level security (RLS) filtering rows by department." },
+        { "id": "c", "text": "Hiding the column in Report view in Power BI Desktop." },
+        { "id": "d", "text": "A sensitivity label named HR-Only." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Object-level security restricts access to specific tables and columns on a per-role basis. Restricted objects are hidden from non-authorized users (they do not appear in the fields list) and any reference to them errors, which is exactly the metadata-level concealment required.",
+        "whyNot": {
+          "b": "RLS filters rows, not columns or tables; the Salary column would still be visible in the model even if some rows were filtered.",
+          "c": "Hiding a column in Report view is only cosmetic; the object still exists and can be unhidden or queried, so it does not secure the metadata.",
+          "d": "A sensitivity label classifies and can protect content but does not remove specific tables or columns from a user's view of the model."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/fabric/security/service-admin-object-level-security",
+      "tags": ["object-level-security", "ols", "columns"]
+    },
+    {
+      "id": "mng-sec-0019",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Manage item-level access",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A finance analyst who is **not** a member of your workspace needs to open one specific report and nothing else. You must grant access to just that report with the least privilege and avoid giving workspace access.\n\nWhat should you do?",
+      "options": [
+        { "id": "a", "text": "Share the individual report with the analyst using per-item sharing." },
+        { "id": "b", "text": "Add the analyst as a workspace Member." },
+        { "id": "c", "text": "Publish the whole workspace as an app to the entire organization." },
+        { "id": "d", "text": "Add the analyst as a workspace Admin." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Per-item (report) sharing grants access to a single report without adding the user to the workspace, which is the least-privilege way to let the analyst open just that one report.",
+        "whyNot": {
+          "b": "Adding the analyst as a workspace Member grants edit/publish rights to all workspace content, far more than access to one report.",
+          "c": "Publishing an app to the entire organization exposes content broadly and does not scope access to a single external analyst and one report.",
+          "d": "Workspace Admin grants full control over the workspace, which is excessive and violates least privilege for viewing one report."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-share-reports",
+      "tags": ["item-access", "sharing", "least-privilege"]
+    },
+    {
+      "id": "mng-sec-0020",
+      "domain": "manage",
+      "objective": "Secure and govern Power BI items",
+      "subObjective": "Distinguish governance features",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "During a governance review, a stakeholder asks which capability ensures that **each viewer of a shared report sees only the data rows relevant to them**, rather than signaling that the content is trusted.\n\nWhich capability provides this per-user data filtering?",
+      "options": [
+        { "id": "a", "text": "Row-level security (RLS)." },
+        { "id": "b", "text": "Certified endorsement." },
+        { "id": "c", "text": "A workspace app." },
+        { "id": "d", "text": "A scheduled refresh." }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Row-level security restricts the data rows each user can see based on their role membership, providing per-user data filtering within a shared report. This directly answers the requirement.",
+        "whyNot": {
+          "b": "Certification is a trust signal indicating content is authoritative; it does not filter data per user.",
+          "c": "A workspace app is a distribution mechanism for content; it does not filter which rows individual users see.",
+          "d": "Scheduled refresh keeps data current on a schedule and has no role in restricting rows per user."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/rls-guidance",
+      "tags": ["rls", "governance", "per-user"]
+    }
+  ]
+}

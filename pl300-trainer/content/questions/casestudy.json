@@ -1,0 +1,148 @@
+{
+  "version": "2026.04.20",
+  "caseStudies": [
+    {
+      "id": "cs-contoso-retail",
+      "title": "Contoso Retail sales model",
+      "scenario": "Contoso Retail operates 240 stores across four regions (North, South, East, West). The analytics team imports data into a Power BI Desktop model with these tables:\n\n| Table | Type | Rows | Notes |\n|---|---|---|---|\n| Sales | Fact | ~48M | grain = one row per order line; has `OrderDate`, `StoreKey`, `ProductKey`, `CustomerKey`, `SalesAmount`, `Quantity` |\n| Date | Dimension | 3,653 | marked as a date table; contiguous 2016-2025 |\n| Product | Dimension | 22,000 | `ProductKey`, `Category`, `Subcategory` |\n| Store | Dimension | 240 | `StoreKey`, `StoreName`, `Region` |\n| Customer | Dimension | 1.6M | `CustomerKey`, `City`, `Region` |\n\nAll dimensions relate to Sales via single-direction one-to-many relationships on their key columns, except `Customer` which was accidentally loaded with a bidirectional relationship. `Date[Date]` links to `Sales[OrderDate]`.\n\nBusiness asks:\n- Regional managers need year-over-year (YoY) sales growth and a rolling 12-month total.\n- Row-level security (RLS) so each regional manager sees only their own `Store[Region]`.\n- The report must be delivered as a published **app** with managers in a viewer audience.\n- Report pages currently load slowly; a `SalesAmount` measure recalculates a full-table SUMX over a calculated column.\n\nThe team wants guidance on modeling, DAX, visuals, and deployment before go-live.",
+      "questions": [
+        {
+          "id": "cs1-0001",
+          "caseStudyId": "cs-contoso-retail",
+          "domain": "model",
+          "objective": "Design and build a data model",
+          "subObjective": "Configure table and column properties; relationships",
+          "type": "single",
+          "difficulty": 2,
+          "stem": "The Customer dimension is joined to Sales with a bidirectional cross-filter relationship. Regional managers report that filtering the Date slicer unexpectedly changes the customer count on unrelated visuals, and query performance is poor. What is the most appropriate change to make while preserving the ability to slice Sales by customer attributes?",
+          "options": [
+            {"id": "a", "text": "Change the Customer-to-Sales relationship cross-filter direction to Single (Customer filters Sales)."},
+            {"id": "b", "text": "Delete the Customer table and merge its columns into Sales with Power Query."},
+            {"id": "c", "text": "Set the Customer-to-Sales relationship to inactive and reference it with USERELATIONSHIP in every measure."},
+            {"id": "d", "text": "Enable Assume referential integrity on the relationship and keep it bidirectional."}
+          ],
+          "correct": ["a"],
+          "explanation": {
+            "why": "A standard star-schema dimension should filter the fact in a single direction. Setting Customer-to-Sales to single cross-filter removes the ambiguous propagation paths that cause unexpected filtering and the extra query cost, while still letting customer attributes slice Sales.",
+            "whyNot": {
+              "b": "Merging a 1.6M-row dimension into the 48M-row fact bloats storage and destroys the star schema without fixing the underlying cross-filter design.",
+              "c": "Making it inactive forces USERELATIONSHIP everywhere and breaks default slicing by customer, which is not required here.",
+              "d": "Assume referential integrity optimizes the join query but does not change cross-filter direction, so the unexpected bidirectional filtering remains."
+            }
+          },
+          "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand",
+          "tags": ["relationships", "cross-filter", "star-schema", "performance"]
+        },
+        {
+          "id": "cs1-0002",
+          "caseStudyId": "cs-contoso-retail",
+          "domain": "model",
+          "objective": "Create model calculations by using DAX",
+          "subObjective": "Create time-intelligence measures",
+          "type": "single",
+          "difficulty": 3,
+          "stem": "Regional managers need a Year-over-Year Growth % measure comparing SalesAmount to the same period one year earlier. The Date table is marked as a date table and is contiguous. Which measure definition is correct and most robust?",
+          "exhibit": "```DAX\n[Total Sales] = SUM ( Sales[SalesAmount] )\n```",
+          "options": [
+            {"id": "a", "text": "YoY Growth % = DIVIDE ( [Total Sales] - CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date'[Date] ) ), CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date'[Date] ) ) )"},
+            {"id": "b", "text": "YoY Growth % = [Total Sales] - CALCULATE ( [Total Sales], PREVIOUSYEAR ( Sales[OrderDate] ) )"},
+            {"id": "c", "text": "YoY Growth % = DIVIDE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )"},
+            {"id": "d", "text": "YoY Growth % = CALCULATE ( [Total Sales], DATEADD ( Sales[OrderDate], -1, YEAR ) )"}
+          ],
+          "correct": ["a"],
+          "explanation": {
+            "why": "SAMEPERIODLASTYEAR must operate on the marked Date table's date column, and the growth ratio requires dividing the delta by the prior-year value using DIVIDE to avoid divide-by-zero. Option a does exactly this.",
+            "whyNot": {
+              "b": "Time-intelligence functions should reference the marked Date dimension column, not the fact's OrderDate, and this returns an absolute difference, not a growth percentage.",
+              "c": "SAMEPERIODLASTYEAR returns a table and cannot be the denominator of DIVIDE directly; it must be wrapped in CALCULATE, and this is not a growth ratio.",
+              "d": "This returns prior-year sales, not a growth percentage, and uses the fact column rather than the Date table."
+            }
+          },
+          "sourceUrl": "https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax",
+          "tags": ["time-intelligence", "SAMEPERIODLASTYEAR", "DIVIDE", "YoY"]
+        },
+        {
+          "id": "cs1-0003",
+          "caseStudyId": "cs-contoso-retail",
+          "domain": "visualize",
+          "objective": "Create reports",
+          "subObjective": "Configure visualizations for analysis",
+          "type": "single",
+          "difficulty": 2,
+          "stem": "Managers want a single visual that shows monthly Total Sales as columns and the rolling 12-month total as a line, on the same axis of months. Which visual type should you use?",
+          "options": [
+            {"id": "a", "text": "Line and clustered column chart, with Total Sales on the column axis and the rolling 12-month measure on the line axis."},
+            {"id": "b", "text": "Two separate cards, one for each measure."},
+            {"id": "c", "text": "Clustered column chart with both measures in the Values well."},
+            {"id": "d", "text": "Ribbon chart with Month on the axis."}
+          ],
+          "correct": ["a"],
+          "explanation": {
+            "why": "A line and clustered column combo chart is designed to render one measure as columns and another as a line over a shared category axis, exactly matching monthly columns plus a rolling-total line.",
+            "whyNot": {
+              "b": "Cards show single aggregated values and cannot display a monthly trend.",
+              "c": "A clustered column chart draws both measures as columns, so the rolling total will not appear as a distinguishable line.",
+              "d": "A ribbon chart emphasizes rank changes between categories, not a column-plus-line comparison."
+            }
+          },
+          "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-combo-chart",
+          "tags": ["combo-chart", "visuals", "trend"]
+        },
+        {
+          "id": "cs1-0004",
+          "caseStudyId": "cs-contoso-retail",
+          "domain": "visualize",
+          "objective": "Create reports",
+          "subObjective": "Enhance reports for usability and storytelling",
+          "type": "single",
+          "difficulty": 2,
+          "stem": "Regional managers want to click a Region in a bar chart and have all other visuals on the page filter to that Region, while a separate KPI card should always show company-wide totals regardless of the selection. What is the best configuration?",
+          "options": [
+            {"id": "a", "text": "Keep default cross-filtering for the page, then use Edit interactions to set the company-wide KPI card's interaction with the bar chart to None."},
+            {"id": "b", "text": "Add a page-level filter that locks every visual to All Regions."},
+            {"id": "c", "text": "Sync a slicer across pages so the KPI card ignores the Region."},
+            {"id": "d", "text": "Set the bar chart's visual interaction to Highlight for all visuals including the KPI card."}
+          ],
+          "correct": ["a"],
+          "explanation": {
+            "why": "Default cross-filtering already lets the bar chart filter other visuals. Using Edit interactions to set the KPI card's response to the bar chart to None makes that one card ignore the selection while everything else still filters.",
+            "whyNot": {
+              "b": "A page-level filter locking All Regions would prevent every visual from responding to the manager's Region click.",
+              "c": "Slicer sync controls slicers across pages and does not stop a card from being cross-filtered by a chart on the same page.",
+              "d": "Highlight still passes the Region context to the card, so it would not show company-wide totals."
+            }
+          },
+          "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/create-reports/service-reports-visual-interactions",
+          "tags": ["visual-interactions", "edit-interactions", "usability"]
+        },
+        {
+          "id": "cs1-0005",
+          "caseStudyId": "cs-contoso-retail",
+          "domain": "manage",
+          "objective": "Manage workspaces and datasets",
+          "subObjective": "Apply and manage row-level security; deploy an app",
+          "type": "single",
+          "difficulty": 3,
+          "stem": "You must implement RLS so each regional manager sees only their own Store[Region], and deliver the report as an app. In Power BI Desktop you create a role. Which DAX filter and deployment approach correctly enforces per-manager Region security?",
+          "options": [
+            {"id": "a", "text": "Define role filter [Region] = USERPRINCIPALNAME() ... no. Use a Region mapping table filtered by USERPRINCIPALNAME(), or a static role per Region, then in the service assign managers to the role members and distribute via the app."},
+            {"id": "b", "text": "Create one role with filter Store[Region] = \"North\" and add every manager to it, then publish."},
+            {"id": "c", "text": "Rely on the app viewer audience alone; app audiences enforce RLS automatically without any role definition."},
+            {"id": "d", "text": "Apply object-level security (OLS) on the Region column so managers cannot see other regions."}
+          ],
+          "correct": ["a"],
+          "explanation": {
+            "why": "Dynamic RLS uses USERPRINCIPALNAME() against a security/mapping table (or a role per Region with the right members) so the filter resolves to the signed-in manager's Region; role membership is assigned in the service, and the report is distributed through the app. This is the maintainable, correct pattern.",
+            "whyNot": {
+              "b": "A single hardcoded North role shows every assigned manager only North data, which is wrong for South, East, and West managers.",
+              "c": "App audiences control who can open the app; they do not define or enforce row filters, so RLS roles are still required.",
+              "d": "OLS hides a column or table for everyone in a role; it does not filter rows to a manager's specific Region."
+            }
+          },
+          "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-rls",
+          "tags": ["RLS", "USERPRINCIPALNAME", "app", "deployment"]
+        }
+      ]
+    }
+  ]
+}

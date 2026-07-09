@@ -1,0 +1,869 @@
+{
+  "version": "2026.04.20",
+  "domain": "prepare",
+  "questions": [
+    {
+      "id": "prep-pq-0001",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Identify and connect to the correct data source",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You are building a report in Power BI Desktop. The sales team maintains monthly figures in a single **.xlsx** workbook stored on a shared network folder. You need to bring the worksheet data into your model with the least effort.\n\nWhich connector should you use?",
+      "options": [
+        { "id": "a", "text": "Get data > Excel workbook" },
+        { "id": "b", "text": "Get data > Web" },
+        { "id": "c", "text": "Get data > SQL Server database" },
+        { "id": "d", "text": "Get data > OData feed" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "An .xlsx file on a file share is a workbook, so the Excel workbook connector reads its worksheets and tables directly.",
+        "whyNot": {
+          "b": "The Web connector is for HTTP/HTTPS pages and web APIs, not a local workbook file.",
+          "c": "SQL Server database connects to a relational database engine, not to an Excel file.",
+          "d": "OData feed consumes an OData REST service, which the workbook is not."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-connect-excel",
+      "tags": ["connect", "Excel", "data source"]
+    },
+    {
+      "id": "prep-pq-0002",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Choose Import vs DirectQuery for a storage requirement",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You connect to a large fact table in an Azure SQL Database that is updated continuously throughout the day. Report users must always see values that are no more than a few minutes old, and the underlying table is far too large to hold in memory. You need to choose a storage mode.\n\nWhich storage mode should you select?",
+      "options": [
+        { "id": "a", "text": "Import" },
+        { "id": "b", "text": "DirectQuery" },
+        { "id": "c", "text": "Import with a scheduled refresh every 30 minutes" },
+        { "id": "d", "text": "Live connection to a Power BI semantic model" }
+      ],
+      "correct": ["b"],
+      "explanation": {
+        "why": "DirectQuery leaves the data at the source and queries it at report time, so users see near real-time values and the large table never has to be loaded into memory.",
+        "whyNot": {
+          "a": "Import caches a snapshot in memory, so data is only as fresh as the last refresh and the table is too large to fit.",
+          "c": "A 30-minute scheduled refresh still shows stale data and does not solve the size problem.",
+          "d": "A live connection targets an existing Power BI semantic model, not a raw Azure SQL table."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-directquery-about",
+      "tags": ["storage mode", "DirectQuery", "import"]
+    },
+    {
+      "id": "prep-pq-0003",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Identify where Direct Lake fits among storage modes",
+      "type": "dropdown",
+      "difficulty": 2,
+      "stem": "Your organization stores data as Delta tables in a Microsoft Fabric lakehouse. You want report performance close to Import while avoiding both scheduled data refresh into the model and the query latency of translating every visual into a SQL query against the source.\n\nComplete the sentence by choosing the best option from the dropdown: \"The storage mode that reads Delta-Parquet files directly from OneLake without importing or query translation is ______.\"",
+      "options": [
+        { "id": "a", "text": "Direct Lake" },
+        { "id": "b", "text": "DirectQuery" },
+        { "id": "c", "text": "Import" },
+        { "id": "d", "text": "Dual" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Direct Lake loads Delta-Parquet files straight from OneLake into memory on demand, giving Import-like speed without a scheduled refresh and without translating each visual to a source query.",
+        "whyNot": {
+          "b": "DirectQuery translates every visual into a query sent to the source, which adds the latency you are trying to avoid.",
+          "c": "Import requires copying and refreshing data into the model, which you explicitly want to avoid.",
+          "d": "Dual is a hybrid of Import and DirectQuery for a table, not a mode that reads Delta files from OneLake."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-overview",
+      "tags": ["Direct Lake", "storage mode", "Fabric"]
+    },
+    {
+      "id": "prep-pq-0004",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Configure privacy levels for combined sources",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "You combine a query that reads a public web page with a query that reads confidential HR salary data. When you refresh, you receive a **Formula.Firewall** error about combining data from sources with different privacy levels.\n\nWhich two actions can resolve the error while keeping the confidential data protected? Each correct answer presents a complete solution.",
+      "options": [
+        { "id": "a", "text": "Set the HR source privacy level to Private and the web source to Public, and allow the query to be re-structured so folding does not push private data to the public source" },
+        { "id": "b", "text": "Assign explicit privacy levels to each data source so the engine knows how it may combine them" },
+        { "id": "c", "text": "Disable all firewall protection by turning off 'Combine data according to your Privacy Level settings for each source' with no other change" },
+        { "id": "d", "text": "Delete the confidential HR query from the model" },
+        { "id": "e", "text": "Store both credentials with the same password" }
+      ],
+      "correct": ["a", "b"],
+      "explanation": {
+        "why": "The firewall error is caused by missing or conflicting privacy levels. Assigning explicit levels (Public/Organizational/Private) to each source, and structuring the query so private data is not sent to a less-trusted source, lets the refresh succeed while honoring isolation.",
+        "whyNot": {
+          "c": "Turning privacy off entirely removes protection, so it does not 'keep the confidential data protected' as required.",
+          "d": "Deleting the HR query removes needed data rather than resolving the combination.",
+          "e": "Privacy levels are unrelated to matching passwords; credentials do not control data isolation."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/enterprise/desktop-privacy-levels",
+      "tags": ["privacy levels", "firewall", "data source"]
+    },
+    {
+      "id": "prep-pq-0005",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Update stored credentials for a source",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "Your SQL Server service account password was rotated, and your Power BI report now fails to refresh with an authentication error. You need to update the stored credential in Power BI Desktop without recreating the queries.\n\nWhat should you do?",
+      "options": [
+        { "id": "a", "text": "In Data source settings, select the source and choose Edit permissions to update the credentials" },
+        { "id": "b", "text": "Delete the query and re-import the table" },
+        { "id": "c", "text": "Change the storage mode from Import to DirectQuery" },
+        { "id": "d", "text": "Clear the Power BI cache in Options and Settings" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Data source settings > Edit permissions is where stored credentials for a source are managed, so you update the password there and keep the existing queries.",
+        "whyNot": {
+          "b": "Recreating the query is unnecessary work and the task says without recreating queries.",
+          "c": "Storage mode has nothing to do with an expired password.",
+          "d": "Clearing the cache does not change stored authentication credentials."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-source-settings",
+      "tags": ["credentials", "data source settings", "refresh"]
+    },
+    {
+      "id": "prep-pq-0006",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Apply Dual storage mode in a composite model",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "You have a composite model. A large **Sales** fact table uses DirectQuery for freshness. A small **Date** dimension is used both to slice DirectQuery visuals and in several Import-mode aggregations. You want the Date table to serve DirectQuery visuals from the source and also be cached in memory for Import visuals.\n\nWhich storage mode should you set on the Date table?",
+      "options": [
+        { "id": "a", "text": "Dual" },
+        { "id": "b", "text": "DirectQuery" },
+        { "id": "c", "text": "Import" },
+        { "id": "d", "text": "Direct Lake" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Dual lets a table act as either Import (cached) or DirectQuery depending on the query context, which is exactly what a shared dimension used by both Import and DirectQuery visuals needs to avoid slow cross-source joins.",
+        "whyNot": {
+          "b": "Pure DirectQuery forces every Date lookup to the source, slowing the Import visuals unnecessarily.",
+          "c": "Pure Import means DirectQuery visuals must join across the cache boundary, causing 'limited relationship' performance issues.",
+          "d": "Direct Lake is not a per-table mode you assign to a dimension in a composite DirectQuery/Import model."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode",
+      "tags": ["storage mode", "Dual", "composite model"]
+    },
+    {
+      "id": "prep-pq-0007",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Distinguish shared vs local semantic model",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A central team publishes a certified **Enterprise Sales** semantic model to the Power BI service. You must build several new reports that all use those exact measures and relationships, and you must not duplicate the data or logic.\n\nWhat should you do when getting data in Power BI Desktop?",
+      "options": [
+        { "id": "a", "text": "Use a live connection to the published Power BI semantic model" },
+        { "id": "b", "text": "Import the source tables again and rebuild the measures locally" },
+        { "id": "c", "text": "Connect with DirectQuery to the underlying data warehouse" },
+        { "id": "d", "text": "Download the .pbix and copy its queries into each new report" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A live connection to a shared semantic model reuses the existing measures, relationships, and security without copying data or logic, which is the goal of a shared model.",
+        "whyNot": {
+          "b": "Re-importing and rebuilding duplicates both the data and the logic, the opposite of the requirement.",
+          "c": "DirectQuery to the warehouse bypasses the certified model and its measures.",
+          "d": "Copying queries into each report duplicates logic and creates maintenance drift."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-report-lifecycle-datasets",
+      "tags": ["shared semantic model", "live connection", "reuse"]
+    },
+    {
+      "id": "prep-pq-0008",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Recognize sources that support DirectQuery",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You want to connect in DirectQuery mode so that no data is cached in the model. One of your candidate sources cannot support DirectQuery and can only be imported.\n\nWhich source can only be used in Import mode?",
+      "options": [
+        { "id": "a", "text": "An Excel workbook on a file share" },
+        { "id": "b", "text": "Azure SQL Database" },
+        { "id": "c", "text": "Azure Synapse Analytics (dedicated SQL pool)" },
+        { "id": "d", "text": "Snowflake" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "File-based sources such as Excel workbooks do not support DirectQuery; only relational and analytical engines that can accept query-time SQL do. So the workbook must be imported.",
+        "whyNot": {
+          "b": "Azure SQL Database is a supported DirectQuery source.",
+          "c": "Azure Synapse dedicated SQL pool is a supported DirectQuery source.",
+          "d": "Snowflake is a supported DirectQuery source."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/connect-data/power-bi-data-sources",
+      "tags": ["DirectQuery", "data source", "Excel"]
+    },
+    {
+      "id": "prep-pq-0009",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Match storage mode to business requirement",
+      "type": "dragdrop",
+      "difficulty": 2,
+      "stem": "You must choose one storage mode for a single table in each scenario below. Match each scenario to the mode that best fits (this item is scored as a single best combined choice).\n\nScenario 1: A 2-billion-row transaction table that must show live data.\nScenario 2: A 5,000-row product dimension used across both Import and DirectQuery visuals.\nScenario 3: A moderate historical table that refreshes nightly and must be fast to slice.\n\nSelect the option that correctly maps all three scenarios.",
+      "options": [
+        { "id": "a", "text": "1 = DirectQuery, 2 = Dual, 3 = Import" },
+        { "id": "b", "text": "1 = Import, 2 = DirectQuery, 3 = Dual" },
+        { "id": "c", "text": "1 = Dual, 2 = Import, 3 = DirectQuery" },
+        { "id": "d", "text": "1 = Import, 2 = Dual, 3 = DirectQuery" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A huge live table needs DirectQuery, a shared dimension crossing Import and DirectQuery visuals needs Dual to avoid limited relationships, and a nightly historical table that must slice fast should be Import.",
+        "whyNot": {
+          "b": "A 2-billion-row live table cannot be Import, and a shared dimension as pure DirectQuery is slow for Import visuals.",
+          "c": "A 2-billion-row live table should not be Dual (it would still cache), and a nightly fast-slice table should not be DirectQuery.",
+          "d": "The nightly, fast-to-slice historical table should be Import, not DirectQuery."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode",
+      "tags": ["storage mode", "Dual", "DirectQuery", "import"]
+    },
+    {
+      "id": "prep-pq-0010",
+      "domain": "prepare",
+      "objective": "Get or connect to data",
+      "subObjective": "Design a composite model with aggregations",
+      "type": "multi",
+      "difficulty": 3,
+      "stem": "You build a composite model over a very large DirectQuery fact table. Most report pages show summarized measures at the month and region level, but a few drillthrough pages need row-level detail. You want summary visuals to be fast while still allowing detail on demand.\n\nWhich two design choices support this? Each correct answer presents part of the solution.",
+      "options": [
+        { "id": "a", "text": "Create an Import-mode aggregation table at month and region grain and map it to the DirectQuery detail table" },
+        { "id": "b", "text": "Keep the detailed fact table in DirectQuery so drillthrough can reach row-level data" },
+        { "id": "c", "text": "Convert the entire detailed fact table to Import so nothing uses DirectQuery" },
+        { "id": "d", "text": "Remove all relationships so visuals query tables independently" },
+        { "id": "e", "text": "Disable query folding on the DirectQuery source" }
+      ],
+      "correct": ["a", "b"],
+      "explanation": {
+        "why": "User-defined aggregations in Import mode answer summary queries from memory and transparently fall back to the DirectQuery detail table for row-level drillthrough, giving speed plus detail on demand.",
+        "whyNot": {
+          "c": "Importing the entire huge table defeats the reason DirectQuery was chosen and may not fit in memory.",
+          "d": "Removing relationships breaks the model and the aggregation fallback mechanism.",
+          "e": "Disabling folding sends more work to Power BI and hurts DirectQuery performance."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/transform-model/aggregations-advanced",
+      "tags": ["aggregations", "composite model", "DirectQuery"]
+    },
+    {
+      "id": "prep-pq-0011",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Interpret column quality indicators",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "In Power Query, you enable **Column quality** for a column named *OrderStatus*. The bar shows 96% Valid, 0% Error, and 4% Empty. You need to describe what the 4% Empty represents.",
+      "options": [
+        { "id": "a", "text": "Rows where the value is null (no value)" },
+        { "id": "b", "text": "Rows that raised an error during evaluation" },
+        { "id": "c", "text": "Rows that contain duplicate values" },
+        { "id": "d", "text": "Rows whose data type does not match the column type" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "In Column quality, Empty counts rows that are null (contain no value); Valid and Error are separate categories.",
+        "whyNot": {
+          "b": "Errors are reported in the separate Error percentage, which is 0% here.",
+          "c": "Duplicates are not part of column quality; that is shown in column distribution.",
+          "d": "Type mismatches surface as errors, not as Empty."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-profiling-tools",
+      "tags": ["column quality", "profiling", "nulls"]
+    },
+    {
+      "id": "prep-pq-0012",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Choose the right profiling view for uniqueness",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You suspect a *CustomerID* column that should be unique actually contains repeated values. You want to see how many distinct values exist and how many of them are unique (appear exactly once).\n\nWhich Power Query profiling feature should you use?",
+      "options": [
+        { "id": "a", "text": "Column distribution" },
+        { "id": "b", "text": "Column quality" },
+        { "id": "c", "text": "Column profile value distribution chart only" },
+        { "id": "d", "text": "The Detect data type command" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Column distribution reports the count of distinct values and the count of unique values, which is exactly what you need to test whether a key column truly has no repeats.",
+        "whyNot": {
+          "b": "Column quality reports valid/error/empty percentages, not distinct vs unique counts.",
+          "c": "The value distribution chart shows frequency of values but the distinct and unique counts come from column distribution.",
+          "d": "Detect data type changes the column type and tells you nothing about uniqueness."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-profiling-tools",
+      "tags": ["column distribution", "profiling", "keys"]
+    },
+    {
+      "id": "prep-pq-0013",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Profile against the full dataset, not a sample",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "By default the Power Query data profiling tools evaluate only the top 1,000 rows, and you are worried the sample is hiding data quality problems that occur later in a 2-million-row table. You need the profile statistics to reflect all rows.\n\nWhat should you do?",
+      "options": [
+        { "id": "a", "text": "In the status bar, change column profiling from 'based on top 1000 rows' to 'based on entire data set'" },
+        { "id": "b", "text": "Sort the column descending so the worst rows appear first" },
+        { "id": "c", "text": "Increase the query timeout in Options" },
+        { "id": "d", "text": "Duplicate the query so profiling runs twice" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "The profiling scope selector in the status bar lets you switch from the default top-1000-row sample to the entire data set so statistics cover every row.",
+        "whyNot": {
+          "b": "Sorting only reorders the preview; profiling still samples 1000 rows unless you change the scope.",
+          "c": "Query timeout does not control profiling scope.",
+          "d": "Duplicating the query does not change the sampling scope of either copy."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-profiling-tools",
+      "tags": ["profiling", "entire dataset", "data quality"]
+    },
+    {
+      "id": "prep-pq-0014",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Replace values versus replace errors",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "After you change a text column to a whole number type, some rows now show **Error** because they contained non-numeric text such as \"N/A\". You want those error cells to become 0 without removing the rows.\n\nWhat should you do?",
+      "options": [
+        { "id": "a", "text": "Select the column and use Replace Errors, entering 0 as the replacement value" },
+        { "id": "b", "text": "Use Replace Values to replace \"N/A\" with 0 after the type change" },
+        { "id": "c", "text": "Remove Errors to delete the affected rows" },
+        { "id": "d", "text": "Change the column back to text type" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Once the type change has produced Error values, Replace Errors targets those error cells specifically and substitutes 0 while keeping the rows.",
+        "whyNot": {
+          "b": "After the type conversion the cells hold error objects, not the original text \"N/A\", so Replace Values on that text no longer matches.",
+          "c": "Remove Errors deletes the rows, which violates the requirement to keep them.",
+          "d": "Reverting to text leaves the column non-numeric and does not produce 0 values."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/replace-values",
+      "tags": ["replace errors", "data type", "cleaning"]
+    },
+    {
+      "id": "prep-pq-0015",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Resolve null values appropriately",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "A *Region* column in an imported table contains nulls. In the source, a blank *Region* means the value should repeat the last non-null region above it (the source uses merged-cell style grouping). Separately, a *Discount* numeric column has nulls that should be treated as 0.\n\nWhich two transformations correctly resolve these? Each answer resolves one column.",
+      "options": [
+        { "id": "a", "text": "Apply Fill Down on the Region column" },
+        { "id": "b", "text": "Use Replace Values on Discount, replacing null with 0" },
+        { "id": "c", "text": "Apply Fill Down on the Discount column" },
+        { "id": "d", "text": "Remove all rows that contain any null" },
+        { "id": "e", "text": "Replace null with the text \"null\" in Region" }
+      ],
+      "correct": ["a", "b"],
+      "explanation": {
+        "why": "Fill Down copies the last non-null value into the nulls beneath it, which reproduces the merged-cell grouping for Region; Replace Values turns the Discount nulls into the numeric 0 you want.",
+        "whyNot": {
+          "c": "Fill Down on Discount would copy a prior discount, not set the intended 0.",
+          "d": "Removing every null row deletes valid rows that simply had missing Region or Discount.",
+          "e": "Replacing null with the literal text \"null\" creates a bogus text value and breaks the region grouping."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/fill-values-column",
+      "tags": ["fill down", "replace values", "nulls"]
+    },
+    {
+      "id": "prep-pq-0016",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Handle locale when converting data types",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A source column *SaleDate* holds dates as text formatted like `13/07/2026` (day/month/year). Your Desktop locale is English (United States), and a plain **Change type to Date** produces errors on days greater than 12. You need the column parsed correctly.\n\n```m\n= Table.TransformColumnTypes(Source, {{\"SaleDate\", type date}})\n```\n\nWhat should you do?",
+      "options": [
+        { "id": "a", "text": "Use Change Type > Using Locale and select English (United Kingdom) so day/month/year is interpreted correctly" },
+        { "id": "b", "text": "Use Replace Errors to set the failed dates to today" },
+        { "id": "c", "text": "Remove the rows that error out" },
+        { "id": "d", "text": "Split the column by the '/' delimiter and leave the parts as text" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Change Type Using Locale lets you specify a culture (for example en-GB) whose date format is d/M/y, so the text is parsed correctly instead of assuming the US month/day order.",
+        "whyNot": {
+          "b": "Replacing errors with today's date corrupts the data rather than parsing it.",
+          "c": "Removing rows discards valid sales that merely had a day greater than 12.",
+          "d": "Splitting to text leaves you without a real date column for time intelligence."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-types",
+      "tags": ["data type", "locale", "dates"]
+    },
+    {
+      "id": "prep-pq-0017",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Understand profiling scope trade-offs",
+      "type": "dropdown",
+      "difficulty": 2,
+      "stem": "You are profiling a 50-million-row DirectQuery-friendly table and profiling on the entire data set is slow and expensive. You accept a representative snapshot to spot obvious issues quickly.\n\nComplete the sentence from the dropdown: \"To profile quickly at the cost of full coverage, keep column profiling set to ______.\"",
+      "options": [
+        { "id": "a", "text": "based on top 1000 rows" },
+        { "id": "b", "text": "based on entire data set" },
+        { "id": "c", "text": "disabled column quality" },
+        { "id": "d", "text": "based on the last 1000 rows" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "The default 'based on top 1000 rows' samples a small slice so profiling is fast and cheap, which is the intended trade-off when full-table profiling is too costly.",
+        "whyNot": {
+          "b": "Entire data set is exactly the slow, expensive option you are avoiding.",
+          "c": "Disabling column quality removes the profiling information you still want.",
+          "d": "There is no 'last 1000 rows' scope option in Power Query."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-profiling-tools",
+      "tags": ["profiling", "sampling", "performance"]
+    },
+    {
+      "id": "prep-pq-0018",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Produce a clean key column for joins",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "You will use *ProductCode* as the key on the one-side of a relationship, but column distribution shows it is not fully unique because a few products were exported twice as identical rows. You need a dimension where each ProductCode appears exactly once, preserving one full copy of each duplicated row.",
+      "options": [
+        { "id": "a", "text": "Select the whole table and use Remove Duplicates" },
+        { "id": "b", "text": "Use Keep Duplicates on ProductCode" },
+        { "id": "c", "text": "Replace duplicate ProductCode values with null" },
+        { "id": "d", "text": "Remove Errors on the ProductCode column" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Remove Duplicates on the fully identical rows keeps one copy of each and eliminates the repeats, yielding a ProductCode that is unique for the one-side of the relationship.",
+        "whyNot": {
+          "b": "Keep Duplicates returns only the repeated rows, the opposite of what you want.",
+          "c": "Nulling out duplicate keys creates null keys and still leaves ambiguous rows.",
+          "d": "Remove Errors only affects error cells, which are not the problem here."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/remove-duplicates",
+      "tags": ["remove duplicates", "keys", "relationships"]
+    },
+    {
+      "id": "prep-pq-0019",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Evaluate and correct data type mismatches",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "A *UnitPrice* column was imported as **Text** because the source stored it with a leading currency symbol. You need it usable in calculations and aggregations.\n\nWhat is the correct first step after removing the currency symbol?",
+      "options": [
+        { "id": "a", "text": "Change the column type to Decimal Number" },
+        { "id": "b", "text": "Leave it as Text and rely on implicit conversion in DAX" },
+        { "id": "c", "text": "Change the column type to Date" },
+        { "id": "d", "text": "Change the column type to True/False" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "A monetary value with fractional cents should be a numeric type such as Decimal Number so it can be summed and averaged reliably.",
+        "whyNot": {
+          "b": "Leaving prices as text prevents correct aggregation and invites conversion errors.",
+          "c": "Date is the wrong type for a price value.",
+          "d": "True/False is a boolean type and cannot represent a price."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-types",
+      "tags": ["data type", "numeric", "cleaning"]
+    },
+    {
+      "id": "prep-pq-0020",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Select a valid join key from profiling results",
+      "type": "hotspot",
+      "difficulty": 2,
+      "stem": "You must pick the best column to use as the primary key of a **Customer** dimension. Column distribution reports the following (this hotspot asks you to select the single column that qualifies):\n\n| Column | Distinct | Unique | Empty |\n|---|---|---|---|\n| CustomerKey | 10,000 | 10,000 | 0 |\n| Email | 9,850 | 9,700 | 150 |\n| FullName | 9,900 | 9,600 | 0 |\n| City | 300 | 5 | 0 |\n\nSelect the column to use as the key.",
+      "options": [
+        { "id": "a", "text": "CustomerKey" },
+        { "id": "b", "text": "Email" },
+        { "id": "c", "text": "FullName" },
+        { "id": "d", "text": "City" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "CustomerKey has 10,000 distinct and 10,000 unique values with no empties, so every row has a distinct non-null value, which is exactly what a primary key requires.",
+        "whyNot": {
+          "b": "Email has empties and fewer unique than distinct values, so some emails repeat and 150 are missing.",
+          "c": "FullName is not fully unique (9,600 unique of 9,900 distinct), so names collide.",
+          "d": "City has only 300 distinct values and repeats heavily, so it cannot identify a customer."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/data-profiling-tools",
+      "tags": ["keys", "profiling", "distinct"]
+    },
+    {
+      "id": "prep-pq-0021",
+      "domain": "prepare",
+      "objective": "Profile and clean the data",
+      "subObjective": "Correct structural nulls introduced by report-style sources",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "A financial export produces a *Department* column where the department name only appears on the first row of each group and the rows below it are null, as shown.\n\n```m\n// Preview of the Department column\n// \"Finance\", null, null, \"Sales\", null, \"IT\", null, null\n```\n\nYou need every row to carry its correct Department before you unpivot the amounts. What should you do?",
+      "options": [
+        { "id": "a", "text": "Apply Fill Down on Department so each null inherits the nearest non-null value above it" },
+        { "id": "b", "text": "Apply Fill Up on Department" },
+        { "id": "c", "text": "Replace null with the previous row's index" },
+        { "id": "d", "text": "Remove blank rows" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Fill Down propagates the last non-null value downward into the nulls, correctly assigning each detail row to the department named at the top of its group.",
+        "whyNot": {
+          "b": "Fill Up would copy the value from below, mislabeling rows with the wrong department.",
+          "c": "Substituting an index does not restore the department names.",
+          "d": "The rows are not blank overall; only the Department cell is null, so removing rows deletes real data."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/fill-values-column",
+      "tags": ["fill down", "nulls", "cleaning"]
+    },
+    {
+      "id": "prep-pq-0022",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Distinguish merge from append",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You have two queries: **Orders** (one row per order) and **Customers** (one row per customer, with a *CustomerID*). You need to add the customer's *Country* onto each order row by matching *CustomerID*.\n\nWhich operation should you use?",
+      "options": [
+        { "id": "a", "text": "Merge queries on CustomerID" },
+        { "id": "b", "text": "Append queries" },
+        { "id": "c", "text": "Group By CustomerID" },
+        { "id": "d", "text": "Transpose the Customers query" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Merge joins two queries side by side on a matching key (CustomerID), letting you expand the Country column onto each order, which adds columns.",
+        "whyNot": {
+          "b": "Append stacks rows from queries with the same shape; it adds rows, not columns from a lookup.",
+          "c": "Group By aggregates rows; it does not bring in the Country column from another table.",
+          "d": "Transpose flips rows and columns and does nothing to relate the two tables."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/merge-queries-overview",
+      "tags": ["merge", "append", "join"]
+    },
+    {
+      "id": "prep-pq-0023",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Unpivot wide columns into attribute/value pairs",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A budget table has one column per month: *Product*, *Jan*, *Feb*, *Mar*, ... *Dec*. To build a proper star-schema fact table you need one row per product per month with columns *Product*, *Month*, and *Amount*.\n\nWhich transformation produces this shape?",
+      "options": [
+        { "id": "a", "text": "Select Product, then Unpivot Other Columns" },
+        { "id": "b", "text": "Pivot the month columns" },
+        { "id": "c", "text": "Transpose the table" },
+        { "id": "d", "text": "Merge the table with itself" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Selecting Product and choosing Unpivot Other Columns turns the twelve month columns into two columns (attribute = Month, value = Amount), giving one row per product per month.",
+        "whyNot": {
+          "b": "Pivot does the reverse, turning rows into columns.",
+          "c": "Transpose swaps the entire orientation and does not create attribute/value pairs.",
+          "d": "A self-merge does not reshape wide columns into rows."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/unpivot-column",
+      "tags": ["unpivot", "star schema", "reshape"]
+    },
+    {
+      "id": "prep-pq-0024",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Choose reference vs duplicate queries",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "You have a query **SalesClean** that applies ten shared cleansing steps against a SQL source. You now need two downstream queries: a summarized *SalesByRegion* and a detailed *SalesDetail*. Both must always reflect any future change you make to the ten cleansing steps, without maintaining those steps twice.\n\nWhat should you create from SalesClean?",
+      "options": [
+        { "id": "a", "text": "Two Reference queries that point back to SalesClean" },
+        { "id": "b", "text": "Two Duplicate queries copied from SalesClean" },
+        { "id": "c", "text": "Two Append queries" },
+        { "id": "d", "text": "Two live connections" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Reference creates queries that read from the output of SalesClean, so any change to its ten steps flows automatically into both downstream queries with no duplicated logic.",
+        "whyNot": {
+          "b": "Duplicate copies all the steps, so future edits must be repeated in each copy, which the requirement forbids.",
+          "c": "Append combines rows; it does not create dependent copies of the cleansing logic.",
+          "d": "Live connections apply to published semantic models, not to chaining Power Query queries."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/reference-duplicate-query",
+      "tags": ["reference", "duplicate", "queries"]
+    },
+    {
+      "id": "prep-pq-0025",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Shape source tables into a star schema",
+      "type": "multi",
+      "difficulty": 2,
+      "stem": "A single flat *SalesExport* query mixes transaction facts (quantity, amount, date) with descriptive product attributes (name, category, color) repeated on every row. You are shaping the model into a star schema.\n\nWhich two steps help create a clean dimension and fact? Each answer is part of the solution.",
+      "options": [
+        { "id": "a", "text": "Reference the flat query, keep the product columns, and Remove Duplicates to build a Product dimension" },
+        { "id": "b", "text": "Reference the flat query and keep the transaction measures plus the ProductKey to build the fact table" },
+        { "id": "c", "text": "Leave everything in one wide table and build measures against it for best performance" },
+        { "id": "d", "text": "Transpose the flat query to separate facts from dimensions" },
+        { "id": "e", "text": "Append the product columns onto the fact rows again" }
+      ],
+      "correct": ["a", "b"],
+      "explanation": {
+        "why": "Deriving a Product dimension (distinct product attributes) and a slim fact table (measures plus the ProductKey) from the flat export is the standard way to build a star schema, which Power BI is optimized for.",
+        "whyNot": {
+          "c": "A single wide table with repeated attributes is denormalized and generally performs and models worse than a star schema.",
+          "d": "Transpose swaps rows and columns and does not separate facts from dimensions.",
+          "e": "Re-appending product columns re-denormalizes the fact table, undoing the star schema."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-bi/guidance/star-schema",
+      "tags": ["star schema", "dimension", "fact"]
+    },
+    {
+      "id": "prep-pq-0026",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Control which queries load to the model",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You created a helper query named **StagingLookup** that is only used as an input to a Merge in another query. It should not appear as a table in the model, but it must still run during refresh so the merge works.\n\nWhat should you do?",
+      "options": [
+        { "id": "a", "text": "Right-click the query and clear Enable load, leaving Include in report refresh enabled" },
+        { "id": "b", "text": "Delete the StagingLookup query" },
+        { "id": "c", "text": "Clear both Enable load and Include in report refresh" },
+        { "id": "d", "text": "Set the query storage mode to DirectQuery" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Clearing Enable load keeps the query out of the model as a table, while leaving Include in report refresh enabled ensures it still evaluates so the dependent merge stays current.",
+        "whyNot": {
+          "b": "Deleting it breaks the merge that depends on it.",
+          "c": "Also disabling refresh would stop the staging query from updating, so the merge would use stale data.",
+          "d": "Storage mode does not control whether a query loads as a visible table."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/queries-overview",
+      "tags": ["enable load", "refresh", "staging"]
+    },
+    {
+      "id": "prep-pq-0027",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Select the correct merge join kind",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "You merge **Orders** into **Customers** to check for orphan orders. You need a result that returns every order, and for orders whose *CustomerID* has no match in Customers, the customer columns should be null so you can find the orphans.\n\nWhich join kind should you choose in the Merge dialog?",
+      "options": [
+        { "id": "a", "text": "Left Outer (all from Orders, matching from Customers)" },
+        { "id": "b", "text": "Inner (only matching rows)" },
+        { "id": "c", "text": "Right Anti (only rows in Customers with no match in Orders)" },
+        { "id": "d", "text": "Right Outer (all from Customers, matching from Orders)" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Left Outer keeps every row from the left table (Orders) and fills the Customers columns with null where there is no match, so orphan orders are visible as rows with null customer data.",
+        "whyNot": {
+          "b": "Inner drops non-matching orders, so you would never see the orphans.",
+          "c": "Right Anti returns unmatched customers, not unmatched orders.",
+          "d": "Right Outer keeps all customers, which does not guarantee every order is returned."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/merge-queries-left-outer",
+      "tags": ["merge", "join kind", "left outer"]
+    },
+    {
+      "id": "prep-pq-0028",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Pivot attribute rows into columns",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A survey table has columns *RespondentID*, *Question*, and *Answer*, with one row per question answered. A downstream tool needs one row per respondent with a separate column for each question's answer.\n\nWhich transformation produces that layout?",
+      "options": [
+        { "id": "a", "text": "Select the Question column and Pivot Column using Answer as the values" },
+        { "id": "b", "text": "Unpivot the Answer column" },
+        { "id": "c", "text": "Group By RespondentID with a count" },
+        { "id": "d", "text": "Split the Answer column by delimiter" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Pivot Column on Question with Answer as the values turns each distinct question into its own column, giving one row per respondent with a column per question.",
+        "whyNot": {
+          "b": "Unpivot does the opposite, collapsing columns into rows.",
+          "c": "Group By with a count aggregates and loses the individual answers.",
+          "d": "Split by delimiter breaks a single column apart and does not reshape rows into columns."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/pivot-columns",
+      "tags": ["pivot", "reshape", "transform"]
+    },
+    {
+      "id": "prep-pq-0029",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Improve import performance and preserve query folding",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "An Import query against a large SQL table is slow to refresh. You only need five of the source's forty columns. You want to reduce the data loaded and keep the work executing on the SQL server (query folding).\n\n```m\nlet\n    Source = Sql.Database(\"srv\", \"db\"),\n    Sales = Source{[Schema=\"dbo\",Item=\"Sales\"]}[Data]\nin\n    Sales\n```\n\nWhat should you add as the next step?",
+      "options": [
+        { "id": "a", "text": "Choose Remove Other Columns to keep only the five needed columns early in the query" },
+        { "id": "b", "text": "Add an Index column and then remove the extra columns at the end" },
+        { "id": "c", "text": "Load all forty columns and hide the unused ones in the model" },
+        { "id": "d", "text": "Add a custom column that concatenates all forty columns" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Removing unneeded columns early folds into a narrower SELECT sent to SQL Server, so less data crosses the wire and refresh is faster while folding is preserved.",
+        "whyNot": {
+          "b": "Adding an Index column is a non-foldable operation that can break folding, and removing columns only at the end still pulls all columns first.",
+          "c": "Loading all forty columns and hiding them still imports the full width, so it does not reduce the refresh cost.",
+          "d": "Concatenating all columns adds work and forces every column to be read, hurting performance."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/query-folding-basics",
+      "tags": ["query folding", "import performance", "remove columns"]
+    },
+    {
+      "id": "prep-pq-0030",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Use transpose for orientation problems",
+      "type": "single",
+      "difficulty": 2,
+      "stem": "A small reference table arrives with metrics down the rows and periods across a single header-less layout, so the values you need as columns are currently in the first column and each subsequent column is a record. You need to flip rows and columns before promoting headers.\n\nWhich transformation should you apply first?",
+      "options": [
+        { "id": "a", "text": "Transpose" },
+        { "id": "b", "text": "Unpivot Columns" },
+        { "id": "c", "text": "Pivot Column" },
+        { "id": "d", "text": "Fill Down" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Transpose swaps rows and columns, so a table that is oriented sideways can be rotated into the correct layout before you promote the first row to headers.",
+        "whyNot": {
+          "b": "Unpivot converts columns into attribute/value rows; it does not rotate the whole table.",
+          "c": "Pivot turns row values into columns based on a key, which is not a full rotation.",
+          "d": "Fill Down only propagates values into nulls and does not change orientation."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/transpose-table",
+      "tags": ["transpose", "reshape", "headers"]
+    },
+    {
+      "id": "prep-pq-0031",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Map transformations to reshaping tasks",
+      "type": "dragdrop",
+      "difficulty": 2,
+      "stem": "Match each reshaping task to the correct Power Query transformation (scored as one combined choice):\n\nTask 1: Turn twelve month columns into Month and Amount columns.\nTask 2: Stack the January and February files, which share identical columns, into one table.\nTask 3: Add the Country column from a Customers query onto each order by matching CustomerID.\n\nSelect the option that maps all three correctly.",
+      "options": [
+        { "id": "a", "text": "1 = Unpivot, 2 = Append, 3 = Merge" },
+        { "id": "b", "text": "1 = Pivot, 2 = Merge, 3 = Append" },
+        { "id": "c", "text": "1 = Merge, 2 = Append, 3 = Unpivot" },
+        { "id": "d", "text": "1 = Append, 2 = Unpivot, 3 = Merge" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Unpivot collapses month columns into rows, Append stacks same-shaped tables by rows, and Merge joins another query's column on a key, matching each task exactly.",
+        "whyNot": {
+          "b": "Pivot is the reverse of what Task 1 needs, and Merge/Append are swapped for Tasks 2 and 3.",
+          "c": "Merge does not turn month columns into rows, and Unpivot does not perform a keyed lookup.",
+          "d": "Append does not reshape month columns, and Unpivot does not stack files."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/append-queries",
+      "tags": ["merge", "append", "unpivot"]
+    },
+    {
+      "id": "prep-pq-0032",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Create a calculated column in Power Query with M",
+      "type": "single",
+      "difficulty": 1,
+      "stem": "You need a new column *FullName* that combines *FirstName* and *LastName* with a space between them, computed during data load rather than in DAX.\n\nWhich Add Custom Column formula is correct?",
+      "exhibit": "```m\n// Add Column > Custom Column\n= Table.AddColumn(Source, \"FullName\", each ______ )\n```",
+      "options": [
+        { "id": "a", "text": "[FirstName] & \" \" & [LastName]" },
+        { "id": "b", "text": "FirstName + LastName" },
+        { "id": "c", "text": "CONCATENATE([FirstName],[LastName])" },
+        { "id": "d", "text": "Text.Combine([FirstName])" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "In M, columns are referenced with [Column] and text is joined with the & operator, so [FirstName] & \" \" & [LastName] produces the spaced full name during load.",
+        "whyNot": {
+          "b": "Bare identifiers without brackets are not column references in M, and + is arithmetic, not text concatenation.",
+          "c": "CONCATENATE is a DAX function, not M, and it takes only two arguments without the space.",
+          "d": "Text.Combine expects a list of text values and a separator; called this way it does not add the last name or a space."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/add-custom-column",
+      "tags": ["custom column", "M", "concatenate"]
+    },
+    {
+      "id": "prep-pq-0033",
+      "domain": "prepare",
+      "objective": "Transform and load the data",
+      "subObjective": "Derive an aggregated table with Group By",
+      "type": "single",
+      "difficulty": 3,
+      "stem": "From a row-level **Sales** query you need a smaller table with one row per *ProductKey* showing total *Quantity* and total *Amount*, to load alongside the detail as an aggregation source. You must not lose the original detailed query.\n\nWhat should you do?",
+      "options": [
+        { "id": "a", "text": "Reference the Sales query, then use Group By on ProductKey with Sum of Quantity and Sum of Amount" },
+        { "id": "b", "text": "Use Group By directly on the Sales query so it is replaced by the summary" },
+        { "id": "c", "text": "Remove Duplicates on ProductKey in the Sales query" },
+        { "id": "d", "text": "Pivot ProductKey into columns" }
+      ],
+      "correct": ["a"],
+      "explanation": {
+        "why": "Referencing Sales first preserves the detail query, and Group By on ProductKey with Sum aggregations produces the one-row-per-product summary you need for the aggregation source.",
+        "whyNot": {
+          "b": "Grouping the Sales query directly overwrites the detail, which the requirement forbids.",
+          "c": "Remove Duplicates keeps one arbitrary row per product but does not sum Quantity or Amount.",
+          "d": "Pivoting ProductKey into columns does not create a summarized fact table."
+        }
+      },
+      "sourceUrl": "https://learn.microsoft.com/en-us/power-query/group-by",
+      "tags": ["group by", "aggregation", "reference"]
+    }
+  ]
+}

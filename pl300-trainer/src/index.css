@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-neutral-950 text-neutral-100 antialiased;
+}
+
+/* Markdown / code rendering */
+.md pre {
+  @apply my-3 overflow-x-auto rounded-lg border border-neutral-800 bg-neutral-900 p-3 text-sm;
+}
+.md code {
+  @apply rounded bg-neutral-800 px-1 py-0.5 font-mono text-[0.85em] text-amber-300;
+}
+.md pre code {
+  @apply bg-transparent p-0 text-neutral-200;
+}
+.md p {
+  @apply my-2 leading-relaxed;
+}
+.md ul {
+  @apply my-2 list-disc space-y-1 pl-6;
+}
+.md ol {
+  @apply my-2 list-decimal space-y-1 pl-6;
+}
+.md table {
+  @apply my-3 w-full border-collapse text-sm;
+}
+.md th,
+.md td {
+  @apply border border-neutral-800 px-3 py-1.5 text-left;
+}
+.md th {
+  @apply bg-neutral-900 font-semibold;
+}
+.md strong {
+  @apply font-semibold text-neutral-50;
+}
+.md a {
+  @apply text-amber-400 underline underline-offset-2;
+}
