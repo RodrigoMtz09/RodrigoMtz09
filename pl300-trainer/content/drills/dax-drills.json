@@ -1,0 +1,519 @@
+{
+  "version": "2026.04.20",
+  "flashcards": [
+    {
+      "id": "fc-0001",
+      "group": "CALCULATE",
+      "front": "CALCULATE",
+      "back": "Evaluates an expression in a modified filter context. Filter arguments replace (overwrite) existing filters on the same column unless combined with KEEPFILTERS. It is the only function that performs context transition, turning the current row context into an equivalent filter context.\n```DAX\nRed Sales = CALCULATE ( [Total Sales], Product[Color] = \"Red\" )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax"
+    },
+    {
+      "id": "fc-0002",
+      "group": "CALCULATE",
+      "front": "CALCULATETABLE",
+      "back": "Like CALCULATE but returns a table instead of a scalar. Use it to apply filter modifiers to a table expression, e.g. as the source of an iterator or a variable.\n```DAX\nHighValue = CALCULATETABLE ( Sales, Sales[Amount] > 1000 )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculatetable-function-dax"
+    },
+    {
+      "id": "fc-0003",
+      "group": "CALCULATE",
+      "front": "Filter argument as Boolean vs table",
+      "back": "A Boolean filter like `Product[Color]=\"Red\"` is syntax sugar CALCULATE rewrites into `FILTER ( ALL ( Product[Color] ), Product[Color]=\"Red\" )`, so it overwrites that column's filter. A table filter gives you full control over which columns are affected.\n```DAX\nCALCULATE ( [Sales], FILTER ( ALL ( Product[Color] ), Product[Color] = \"Red\" ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax"
+    },
+    {
+      "id": "fc-0004",
+      "group": "CALCULATE",
+      "front": "CALCULATE filter evaluation order",
+      "back": "Filter arguments are evaluated in the OUTER filter context (before the context modification), then applied together with the new context to evaluate the expression. This is why a filter argument can reference the pre-existing context.\n```DAX\nCALCULATE ( [Sales], 'Date'[Year] = MAX ( 'Date'[Year] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax"
+    },
+    {
+      "id": "fc-0005",
+      "group": "CALCULATE",
+      "front": "KEEPFILTERS with CALCULATE",
+      "back": "KEEPFILTERS stops a filter argument from overwriting the same column's existing filter; instead the new filter is intersected (AND) with the current one.\n```DAX\nCALCULATE ( [Sales], KEEPFILTERS ( Product[Color] = \"Red\" ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/keepfilters-function-dax"
+    },
+    {
+      "id": "fc-0006",
+      "group": "filter modifiers",
+      "front": "ALL",
+      "back": "Removes filters from a table or one or more columns, returning all distinct values ignoring context. Used to compute denominators like % of total.\n```DAX\nAll Sales = CALCULATE ( [Total Sales], ALL ( Product ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/all-function-dax"
+    },
+    {
+      "id": "fc-0007",
+      "group": "filter modifiers",
+      "front": "ALLEXCEPT",
+      "back": "Removes all filters from a table EXCEPT those on the specified columns. Handy for keeping a grouping column while clearing everything else.\n```DAX\nCALCULATE ( [Sales], ALLEXCEPT ( Product, Product[Category] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/allexcept-function-dax"
+    },
+    {
+      "id": "fc-0008",
+      "group": "filter modifiers",
+      "front": "ALLSELECTED",
+      "back": "Returns values as filtered by the query's outer context (e.g. slicers) while ignoring filters from inside the current visual's row/column. Great for visual-level % of total that respects slicers.\n```DAX\nCALCULATE ( [Sales], ALLSELECTED ( Product[Category] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/allselected-function-dax"
+    },
+    {
+      "id": "fc-0009",
+      "group": "filter modifiers",
+      "front": "REMOVEFILTERS",
+      "back": "The explicit, readable modifier that clears filters from tables or columns. Functionally the CALCULATE-modifier form of ALL, but can only be used as a filter modifier.\n```DAX\nCALCULATE ( [Sales], REMOVEFILTERS ( 'Date' ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/removefilters-function-dax"
+    },
+    {
+      "id": "fc-0010",
+      "group": "filter modifiers",
+      "front": "ALLCROSSFILTERED vs ALLNOBLANKROW",
+      "back": "ALLNOBLANKROW removes filters but excludes the blank row added for invalid relationships; ALLCROSSFILTERED clears filters that reached a table through cross-filtering as well.\n```DAX\nCALCULATE ( [Sales], ALLNOBLANKROW ( 'Date' ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/allnoblankrow-function-dax"
+    },
+    {
+      "id": "fc-0011",
+      "group": "time intelligence",
+      "front": "TOTALYTD",
+      "back": "Returns a year-to-date running total of an expression over a date column. Requires a contiguous date table. Optional year-end date argument for fiscal years.\n```DAX\nSales YTD = TOTALYTD ( [Total Sales], 'Date'[Date] )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/totalytd-function-dax"
+    },
+    {
+      "id": "fc-0012",
+      "group": "time intelligence",
+      "front": "DATESYTD",
+      "back": "Returns a table of dates from the start of the year to the last date in context. Used inside CALCULATE for custom YTD logic.\n```DAX\nCALCULATE ( [Total Sales], DATESYTD ( 'Date'[Date] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/datesytd-function-dax"
+    },
+    {
+      "id": "fc-0013",
+      "group": "time intelligence",
+      "front": "DATEADD",
+      "back": "Shifts the dates in the current context by an interval (DAY, MONTH, QUARTER, YEAR). More flexible than PREVIOUSYEAR because it works at any granularity.\n```DAX\nPY Sales = CALCULATE ( [Total Sales], DATEADD ( 'Date'[Date], -1, YEAR ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/dateadd-function-dax"
+    },
+    {
+      "id": "fc-0014",
+      "group": "time intelligence",
+      "front": "SAMEPERIODLASTYEAR",
+      "back": "Returns the set of dates shifted back exactly one year. Equivalent to DATEADD(dates, -1, YEAR). Must reference the marked date table's date column.\n```DAX\nPY = CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax"
+    },
+    {
+      "id": "fc-0015",
+      "group": "time intelligence",
+      "front": "DATESINPERIOD (rolling 12 months)",
+      "back": "Returns dates within an interval starting from a reference date. Ideal for a rolling 12-month total ending at the last date in context.\n```DAX\nRolling 12M = CALCULATE ( [Total Sales], DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -12, MONTH ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/datesinperiod-function-dax"
+    },
+    {
+      "id": "fc-0016",
+      "group": "iterators",
+      "front": "SUMX",
+      "back": "Iterates a table, evaluating an expression per row in row context, then sums the results. Use when the per-row calculation cannot be pre-aggregated (e.g. price * quantity).\n```DAX\nRevenue = SUMX ( Sales, Sales[Qty] * Sales[Price] )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sumx-function-dax"
+    },
+    {
+      "id": "fc-0017",
+      "group": "iterators",
+      "front": "AVERAGEX",
+      "back": "Iterates a table and averages an expression evaluated in row context. Respects the table granularity you pass, which changes the average.\n```DAX\nAvg Order Value = AVERAGEX ( Sales, Sales[Qty] * Sales[Price] )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/averagex-function-dax"
+    },
+    {
+      "id": "fc-0018",
+      "group": "iterators",
+      "front": "RANKX",
+      "back": "Evaluates an expression for each row of a table and returns its rank. The table is usually ALL/ALLSELECTED of the column being ranked to get the full comparison set.\n```DAX\nProduct Rank = RANKX ( ALL ( Product[Name] ), [Total Sales] )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/rankx-function-dax"
+    },
+    {
+      "id": "fc-0019",
+      "group": "iterators",
+      "front": "MAXX / MINX",
+      "back": "Iterate a table and return the max/min of an expression across rows. Useful to find the best-selling period or largest single order.\n```DAX\nBest Month = MAXX ( VALUES ( 'Date'[Month] ), [Total Sales] )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/maxx-function-dax"
+    },
+    {
+      "id": "fc-0020",
+      "group": "iterators",
+      "front": "Iterators create row context",
+      "back": "Every X-function establishes a row context over its table argument. To reference a measure or aggregate the whole related fact per row, wrap it in CALCULATE to trigger context transition.\n```DAX\nSUMX ( Customer, CALCULATE ( [Total Sales] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sumx-function-dax"
+    },
+    {
+      "id": "fc-0021",
+      "group": "semi-additive",
+      "front": "Semi-additive measures",
+      "back": "Measures that sum across some dimensions but not over time (e.g. inventory, account balances). You take the value at a point in time rather than summing days.\n```DAX\nClosing Stock = CALCULATE ( SUM ( Inventory[Units] ), LASTDATE ( 'Date'[Date] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/lastdate-function-dax"
+    },
+    {
+      "id": "fc-0022",
+      "group": "semi-additive",
+      "front": "LASTNONBLANK",
+      "back": "Returns the last date (per context) for which an expression is not blank. Essential for balances where not every day has a row.\n```DAX\nBalance = CALCULATE ( SUM ( Ledger[Amount] ), LASTNONBLANK ( 'Date'[Date], CALCULATE ( COUNTROWS ( Ledger ) ) ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/lastnonblank-function-dax"
+    },
+    {
+      "id": "fc-0023",
+      "group": "semi-additive",
+      "front": "OPENINGBALANCEMONTH",
+      "back": "Returns the value of an expression evaluated at the last date before the current month, i.e. the opening balance. Companion of CLOSINGBALANCEMONTH.\n```DAX\nOpening = OPENINGBALANCEMONTH ( SUM ( Inventory[Units] ), 'Date'[Date] )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/openingbalancemonth-function-dax"
+    },
+    {
+      "id": "fc-0024",
+      "group": "semi-additive",
+      "front": "CLOSINGBALANCEYEAR",
+      "back": "Evaluates an expression at the last date of the year in the current context, giving the year-end balance for semi-additive facts.\n```DAX\nYear End Stock = CLOSINGBALANCEYEAR ( SUM ( Inventory[Units] ), 'Date'[Date] )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/closingbalanceyear-function-dax"
+    },
+    {
+      "id": "fc-0025",
+      "group": "semi-additive",
+      "front": "FIRSTDATE / LASTDATE",
+      "back": "Return the first/last date in the current context as a one-row table. Used to snapshot semi-additive values at period boundaries.\n```DAX\nCALCULATE ( SUM ( Inventory[Units] ), LASTDATE ( 'Date'[Date] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/lastdate-function-dax"
+    },
+    {
+      "id": "fc-0026",
+      "group": "calculation groups",
+      "front": "Calculation groups",
+      "back": "A model feature (authored in Tabular Editor) that applies reusable calculation logic (calculation items) across many measures, reducing measure sprawl for things like time intelligence.\n```DAX\nCurrent Measure -- placeholder replaced by SELECTEDMEASURE()\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/analysis-services/tabular-models/calculation-groups"
+    },
+    {
+      "id": "fc-0027",
+      "group": "calculation groups",
+      "front": "SELECTEDMEASURE",
+      "back": "Placeholder inside a calculation item that references whatever measure is being evaluated, letting one item (e.g. YTD) apply to any measure.\n```DAX\nYTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Date'[Date] ) )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/selectedmeasure-function-dax"
+    },
+    {
+      "id": "fc-0028",
+      "group": "calculation groups",
+      "front": "Calculation item precedence",
+      "back": "When multiple calculation groups apply, precedence determines the order they wrap the base measure. Higher precedence is applied last (outermost).\n```DAX\n-- Time Intelligence group precedence 10\n-- Currency group precedence 20 -> applied outermost\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/analysis-services/tabular-models/calculation-groups"
+    },
+    {
+      "id": "fc-0029",
+      "group": "calculation groups",
+      "front": "SELECTEDMEASURENAME",
+      "back": "Returns the name of the measure currently being evaluated by a calculation item, enabling conditional logic (e.g. skip time intelligence for ratio measures).\n```DAX\nIF ( SELECTEDMEASURENAME () = \"Margin %\", SELECTEDMEASURE (), ... )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/selectedmeasurename-function-dax"
+    },
+    {
+      "id": "fc-0030",
+      "group": "calculation groups",
+      "front": "ISSELECTEDMEASURE",
+      "back": "Returns TRUE if the measure being evaluated is one of a supplied list, used to apply or suppress a calculation item for specific measures.\n```DAX\nIF ( ISSELECTEDMEASURE ( [Sales], [Cost] ), SELECTEDMEASURE (), BLANK () )\n```",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/isselectedmeasure-function-dax"
+    }
+  ],
+  "predictOutput": [
+    {
+      "id": "po-0001",
+      "model": "**Sales** (single table, no relationships)\n\n| Product | Qty | Price |\n|---|---|---|\n| A | 2 | 10 |\n| B | 3 | 20 |\n| C | 1 | 50 |",
+      "measure": "```DAX\nRevenue = SUMX ( Sales, Sales[Qty] * Sales[Price] )\n```",
+      "question": "What value does this measure return with no filters applied (grand total)?",
+      "options": [
+        {"id": "a", "text": "130"},
+        {"id": "b", "text": "80"},
+        {"id": "c", "text": "6"},
+        {"id": "d", "text": "480"}
+      ],
+      "correct": ["a"],
+      "explanation": "SUMX iterates each row in row context: (2*10)+(3*20)+(1*50) = 20+60+50 = 130. It does not multiply the column sums (which would give 6*80=480).",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sumx-function-dax"
+    },
+    {
+      "id": "po-0002",
+      "model": "**Sales**\n\n| Product | Qty | Price |\n|---|---|---|\n| A | 2 | 10 |\n| B | 3 | 20 |\n| C | 1 | 50 |",
+      "measure": "```DAX\nAvg Line Value = SUM ( Sales[Qty] ) * SUM ( Sales[Price] )\n```",
+      "question": "What value does this measure return at the grand total?",
+      "options": [
+        {"id": "a", "text": "480"},
+        {"id": "b", "text": "130"},
+        {"id": "c", "text": "160"},
+        {"id": "d", "text": "80"}
+      ],
+      "correct": ["a"],
+      "explanation": "SUM aggregates each column independently before multiplying: SUM(Qty)=6, SUM(Price)=80, and 6*80=480. This is the classic wrong-way-to-compute-revenue pattern that SUMX avoids.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sum-function-dax"
+    },
+    {
+      "id": "po-0003",
+      "model": "**Sales** related to **Product** on ProductKey (Product filters Sales).\n\n**Product**\n\n| ProductKey | Color |\n|---|---|\n| 1 | Red |\n| 2 | Blue |\n\n**Sales**\n\n| ProductKey | Amount |\n|---|---|\n| 1 | 100 |\n| 2 | 200 |\n| 1 | 50 |",
+      "measure": "```DAX\nRed Sales = CALCULATE ( SUM ( Sales[Amount] ), Product[Color] = \"Red\" )\n```",
+      "question": "In a card visual with no other filters, what does Red Sales return?",
+      "options": [
+        {"id": "a", "text": "150"},
+        {"id": "b", "text": "350"},
+        {"id": "c", "text": "200"},
+        {"id": "d", "text": "100"}
+      ],
+      "correct": ["a"],
+      "explanation": "CALCULATE applies Product[Color]=\"Red\", which keeps ProductKey 1. Sales rows for key 1 are 100 and 50, summing to 150. The Blue row (200) is filtered out.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax"
+    },
+    {
+      "id": "po-0004",
+      "model": "**Product** (filters Sales)\n\n| ProductKey | Color |\n|---|---|\n| 1 | Red |\n| 2 | Blue |\n\n**Sales**\n\n| ProductKey | Amount |\n|---|---|\n| 1 | 100 |\n| 2 | 200 |",
+      "measure": "```DAX\nAll Color Sales = CALCULATE ( SUM ( Sales[Amount] ), ALL ( Product[Color] ) )\n```",
+      "question": "In a table visual with Product[Color] on rows, what value appears on the 'Red' row?",
+      "options": [
+        {"id": "a", "text": "300"},
+        {"id": "b", "text": "100"},
+        {"id": "c", "text": "200"},
+        {"id": "d", "text": "BLANK"}
+      ],
+      "correct": ["a"],
+      "explanation": "The Red row provides a filter context of Color=Red, but ALL(Product[Color]) removes that filter, so the measure sums every Sales row: 100+200=300. Each color row shows the same 300, the classic denominator behavior.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/all-function-dax"
+    },
+    {
+      "id": "po-0005",
+      "model": "**Product** (filters Sales)\n\n| ProductKey | Category | Color |\n|---|---|---|\n| 1 | Bikes | Red |\n| 2 | Bikes | Blue |\n| 3 | Gear | Red |\n\n**Sales**\n\n| ProductKey | Amount |\n|---|---|\n| 1 | 100 |\n| 2 | 200 |\n| 3 | 40 |",
+      "measure": "```DAX\nCat Sales = CALCULATE ( SUM ( Sales[Amount] ), ALLEXCEPT ( Product, Product[Category] ) )\n```",
+      "question": "In a table with both Category and Color on rows, what does the (Bikes, Red) cell return?",
+      "options": [
+        {"id": "a", "text": "300"},
+        {"id": "b", "text": "100"},
+        {"id": "c", "text": "340"},
+        {"id": "d", "text": "440"}
+      ],
+      "correct": ["a"],
+      "explanation": "ALLEXCEPT clears all Product filters except Category, so the Color=Red filter is removed but Category=Bikes remains. Bikes rows are ProductKeys 1 and 2: 100+200=300.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/allexcept-function-dax"
+    },
+    {
+      "id": "po-0006",
+      "model": "**Product** (filters Sales); a slicer has selected Colors {Red, Blue}. Table visual rows show Color.\n\n**Product**\n\n| ProductKey | Color |\n|---|---|\n| 1 | Red |\n| 2 | Blue |\n| 3 | Green |\n\n**Sales**\n\n| ProductKey | Amount |\n|---|---|\n| 1 | 100 |\n| 2 | 200 |\n| 3 | 90 |",
+      "measure": "```DAX\n% of Selected = DIVIDE ( SUM ( Sales[Amount] ), CALCULATE ( SUM ( Sales[Amount] ), ALLSELECTED ( Product[Color] ) ) )\n```",
+      "question": "With the slicer set to {Red, Blue}, what does the 'Red' row return?",
+      "options": [
+        {"id": "a", "text": "0.333 (about 33%)"},
+        {"id": "b", "text": "0.256 (about 26%)"},
+        {"id": "c", "text": "1.0 (100%)"},
+        {"id": "d", "text": "0.5 (50%)"}
+      ],
+      "correct": ["a"],
+      "explanation": "The Red row numerator is 100. ALLSELECTED restores the slicer's outer selection {Red, Blue} but ignores the row's own Color filter, so the denominator is 100+200=300. 100/300 = 0.333. Green (90) is excluded because the slicer did not select it.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/allselected-function-dax"
+    },
+    {
+      "id": "po-0007",
+      "model": "**Product** (filters Sales). Table visual rows show Color.\n\n**Product**\n\n| ProductKey | Color |\n|---|---|\n| 1 | Red |\n| 2 | Blue |\n\n**Sales**\n\n| ProductKey | Amount |\n|---|---|\n| 1 | 100 |\n| 2 | 200 |",
+      "measure": "```DAX\nKeep Red = CALCULATE ( SUM ( Sales[Amount] ), KEEPFILTERS ( Product[Color] = \"Red\" ) )\n```",
+      "question": "On the 'Blue' row of the table, what value appears?",
+      "options": [
+        {"id": "a", "text": "BLANK"},
+        {"id": "b", "text": "200"},
+        {"id": "c", "text": "100"},
+        {"id": "d", "text": "300"}
+      ],
+      "correct": ["a"],
+      "explanation": "KEEPFILTERS intersects the new Red filter with the row's existing Blue filter instead of overwriting it. Blue AND Red is empty, so the Blue row returns BLANK. Without KEEPFILTERS it would overwrite to Red and show 100.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/keepfilters-function-dax"
+    },
+    {
+      "id": "po-0008",
+      "model": "**Date** (marked date table, filters Sales) with dates in 2024 and 2025. Visual filtered to Year = 2025.\n\n**Sales** (aggregated)\n\n| Year | Amount |\n|---|---|\n| 2024 | 500 |\n| 2025 | 800 |",
+      "measure": "```DAX\nPY Sales = CALCULATE ( SUM ( Sales[Amount] ), SAMEPERIODLASTYEAR ( 'Date'[Date] ) )\n```",
+      "question": "In a card filtered to Year 2025, what does PY Sales return?",
+      "options": [
+        {"id": "a", "text": "500"},
+        {"id": "b", "text": "800"},
+        {"id": "c", "text": "1300"},
+        {"id": "d", "text": "BLANK"}
+      ],
+      "correct": ["a"],
+      "explanation": "SAMEPERIODLASTYEAR shifts the 2025 context back one year to 2024, so the measure returns 2024 sales = 500.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax"
+    },
+    {
+      "id": "po-0009",
+      "model": "**Date** (marked, filters Sales), monthly grain. Visual filtered to March 2025.\n\n**Sales** (monthly)\n\n| Month | Amount |\n|---|---|\n| 2024-04 .. 2025-03 | see note |\n\nNote: every month from Apr-2024 through Mar-2025 has Amount = 10 (12 months). Feb-2024 and earlier have Amount = 99.",
+      "measure": "```DAX\nRolling 12M = CALCULATE ( SUM ( Sales[Amount] ), DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -12, MONTH ) )\n```",
+      "question": "With the visual filtered to March 2025, what does Rolling 12M return?",
+      "options": [
+        {"id": "a", "text": "120"},
+        {"id": "b", "text": "10"},
+        {"id": "c", "text": "219"},
+        {"id": "d", "text": "99"}
+      ],
+      "correct": ["a"],
+      "explanation": "MAX('Date'[Date]) in the March 2025 context is the last day of March 2025. DATESINPERIOD spans back 12 months to Apr-2024 through Mar-2025, all at Amount=10, so 12*10 = 120. The pre-Apr-2024 months (99) fall outside the window.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/datesinperiod-function-dax"
+    },
+    {
+      "id": "po-0010",
+      "model": "**Customer** (filters Sales, one-to-many).\n\n**Customer**\n\n| CustomerKey | Name |\n|---|---|\n| 1 | Ann |\n| 2 | Bob |\n\n**Sales**\n\n| CustomerKey | Amount |\n|---|---|\n| 1 | 100 |\n| 1 | 100 |\n| 2 | 300 |",
+      "measure": "```DAX\nCustomers Over 150 = COUNTROWS ( FILTER ( Customer, CALCULATE ( SUM ( Sales[Amount] ) ) > 150 ) )\n```",
+      "question": "With no external filters, what does this measure return?",
+      "options": [
+        {"id": "a", "text": "2"},
+        {"id": "b", "text": "1"},
+        {"id": "c", "text": "3"},
+        {"id": "d", "text": "0"}
+      ],
+      "correct": ["a"],
+      "explanation": "FILTER iterates Customer in row context. CALCULATE triggers context transition, so per customer: Ann = 100+100 = 200 (>150, kept), Bob = 300 (>150, kept). Both qualify, so COUNTROWS = 2.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/filter-function-dax"
+    },
+    {
+      "id": "po-0011",
+      "model": "**Product** (filters Sales). Table visual rows show Product[Name].\n\n**Product**\n\n| Name | -- |\n|---|---|\n| A |  |\n| B |  |\n| C |  |\n\n**Sales** (by product): A=300, B=500, C=200.",
+      "measure": "```DAX\nRank = RANKX ( ALL ( Product[Name] ), [Total Sales], , DESC, DENSE )\n```",
+      "question": "On the row for product A, what rank is returned?",
+      "options": [
+        {"id": "a", "text": "2"},
+        {"id": "b", "text": "1"},
+        {"id": "c", "text": "3"},
+        {"id": "d", "text": "BLANK"}
+      ],
+      "correct": ["a"],
+      "explanation": "ALL(Product[Name]) is the ranking set with values B=500, A=300, C=200. Descending, B is 1, A is 2, C is 3. The current row context (A) makes [Total Sales]=300, whose rank is 2.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/rankx-function-dax"
+    },
+    {
+      "id": "po-0012",
+      "model": "**Date** (marked, filters Sales). Visual filtered to Year 2025. Two calculation groups apply: 'Time Intelligence' with item YTD (precedence 10) and 'Currency' with item ToUSD (precedence 20, multiplies by 1.1).\n\n**Sales** cumulative through the filtered date in 2025 = 800 (local currency).",
+      "measure": "```DAX\n-- base measure\nTotal Sales = SUM ( Sales[Amount] )\n-- YTD item: CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Date'[Date] ) )\n-- ToUSD item: SELECTEDMEASURE () * 1.1\n```",
+      "question": "With both calculation items applied to Total Sales (YTD then converted), what value is returned?",
+      "options": [
+        {"id": "a", "text": "880"},
+        {"id": "b", "text": "800"},
+        {"id": "c", "text": "800 * 1.1 then YTD, undefined"},
+        {"id": "d", "text": "1.1"}
+      ],
+      "correct": ["a"],
+      "explanation": "Higher precedence is applied outermost. Currency (20) wraps Time Intelligence (10): ToUSD( YTD( Total Sales ) ). YTD gives 800, then *1.1 = 880. Precedence order determines the nesting, which yields 880.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/analysis-services/tabular-models/calculation-groups"
+    }
+  ],
+  "contextDrills": [
+    {
+      "id": "cd-0001",
+      "model": "**Sales** (single table, no relationships)\n\n| Product | Amount |\n|---|---|\n| A | 100 |\n| B | 200 |\n| C | 300 |",
+      "measure": "```DAX\nBad Total = SUMX ( Sales, SUM ( Sales[Amount] ) )\n```",
+      "question": "What does Bad Total return at the grand total, and why?",
+      "options": [
+        {"id": "a", "text": "1800 - SUM ignores row context and returns the full 600 for each of the 3 rows"},
+        {"id": "b", "text": "600 - SUM respects the current row"},
+        {"id": "c", "text": "100 - only the first row"},
+        {"id": "d", "text": "BLANK"}
+      ],
+      "correct": ["a"],
+      "explanation": "SUM is an aggregator that ignores row context; it always sums the whole column (600) in the current filter context. SUMX iterates 3 rows and for each computes 600, giving 3*600 = 1800. This shows that aggregators do not read row context - you need CALCULATE for context transition.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/sumx-function-dax"
+    },
+    {
+      "id": "cd-0002",
+      "model": "**Sales** (single table)\n\n| Product | Amount |\n|---|---|\n| A | 100 |\n| B | 200 |\n| C | 300 |",
+      "measure": "```DAX\nCT Total = SUMX ( Sales, CALCULATE ( SUM ( Sales[Amount] ) ) )\n```",
+      "question": "What does CT Total return at the grand total?",
+      "options": [
+        {"id": "a", "text": "600"},
+        {"id": "b", "text": "1800"},
+        {"id": "c", "text": "300"},
+        {"id": "d", "text": "100"}
+      ],
+      "correct": ["a"],
+      "explanation": "CALCULATE performs context transition: the iterator's row context becomes a filter context for that single row. Because there are no other unique columns, each row filters to itself, giving 100, 200, 300, which SUMX adds to 600. Contrast with cd-0001 where the missing CALCULATE gave 1800.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax"
+    },
+    {
+      "id": "cd-0003",
+      "model": "**Sales** calculated COLUMN (not a measure)\n\n| Product | Amount |\n|---|---|\n| A | 100 |\n| B | 200 |",
+      "measure": "```DAX\nShareCol = Sales[Amount] / SUM ( Sales[Amount] )\n```",
+      "question": "As a calculated column, what value does ShareCol hold in the row for product A?",
+      "options": [
+        {"id": "a", "text": "0.333 (100 / 300)"},
+        {"id": "b", "text": "1.0 (100 / 100)"},
+        {"id": "c", "text": "100"},
+        {"id": "d", "text": "BLANK"}
+      ],
+      "correct": ["a"],
+      "explanation": "A calculated column has row context (Sales[Amount]=100 for A) but no filter context, so SUM(Sales[Amount]) ignores the row and returns the whole column total 300. Thus 100/300 = 0.333. Row context does not auto-filter aggregations.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/dax-calculated-columns"
+    },
+    {
+      "id": "cd-0004",
+      "model": "**Product** (one-to-many to Sales)\n\n**Product**\n\n| ProductKey | Name |\n|---|---|\n| 1 | A |\n| 2 | B |\n\n**Sales**\n\n| ProductKey | Amount |\n|---|---|\n| 1 | 100 |\n| 2 | 200 |",
+      "measure": "```DAX\nProdSalesCol = SUM ( Sales[Amount] )\n```",
+      "question": "Defined as a calculated column on the Product table, what does ProdSalesCol show for row A (ProductKey 1)?",
+      "options": [
+        {"id": "a", "text": "300 - row context on Product does not propagate through the relationship without CALCULATE"},
+        {"id": "b", "text": "100 - the relationship auto-filters Sales to A"},
+        {"id": "c", "text": "BLANK"},
+        {"id": "d", "text": "200"}
+      ],
+      "correct": ["a"],
+      "explanation": "Row context does NOT automatically propagate across relationships. Without CALCULATE there is no context transition, so SUM(Sales[Amount]) sees no filter and returns the full 300 for every Product row. Wrapping in CALCULATE would give 100 for A.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax"
+    },
+    {
+      "id": "cd-0005",
+      "model": "**Product** (one-to-many to Sales)\n\n**Product**\n\n| ProductKey | Name |\n|---|---|\n| 1 | A |\n| 2 | B |\n\n**Sales**\n\n| ProductKey | Amount |\n|---|---|\n| 1 | 100 |\n| 2 | 200 |",
+      "measure": "```DAX\nProdSales = CALCULATE ( SUM ( Sales[Amount] ) )\n```",
+      "question": "As a calculated column on Product, what does ProdSales show for row A?",
+      "options": [
+        {"id": "a", "text": "100"},
+        {"id": "b", "text": "300"},
+        {"id": "c", "text": "200"},
+        {"id": "d", "text": "BLANK"}
+      ],
+      "correct": ["a"],
+      "explanation": "CALCULATE with no filter arguments still performs context transition: Product's row context (ProductKey=1) becomes a filter context that propagates through the one-to-many relationship to Sales, filtering to Amount=100 for A.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/calculate-function-dax"
+    },
+    {
+      "id": "cd-0006",
+      "model": "**Customer** (one-to-many to Sales)\n\n**Customer**\n\n| CustomerKey | Segment |\n|---|---|\n| 1 | Retail |\n| 2 | Retail |\n| 3 | Wholesale |\n\n**Sales**: Cust1=100, Cust2=250, Cust3=50.",
+      "measure": "```DAX\nBigCustomers = COUNTROWS ( FILTER ( VALUES ( Customer[CustomerKey] ), [Total Sales] > 150 ) )\n```",
+      "question": "With a visual filtered to Segment = Retail, what does BigCustomers return?",
+      "options": [
+        {"id": "a", "text": "1 - only Cust2 (250) exceeds 150 among Retail customers"},
+        {"id": "b", "text": "2 - Cust2 and Cust3"},
+        {"id": "c", "text": "3"},
+        {"id": "d", "text": "0"}
+      ],
+      "correct": ["a"],
+      "explanation": "The Retail filter restricts VALUES(CustomerKey) to {1,2}. FILTER iterates them; [Total Sales] is a measure so context transition applies per customer: Cust1=100 (no), Cust2=250 (yes). Cust3 is Wholesale, excluded by the visual filter. Count = 1.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/filter-function-dax"
+    },
+    {
+      "id": "cd-0007",
+      "model": "**Sales** (single table)\n\n| Region | Amount |\n|---|---|\n| North | 100 |\n| North | 200 |\n| South | 300 |",
+      "measure": "```DAX\nRegionShare = DIVIDE ( SUM ( Sales[Amount] ), CALCULATE ( SUM ( Sales[Amount] ), ALL ( Sales ) ) )\n```",
+      "question": "In a table visual with Region on rows, what does the North row show?",
+      "options": [
+        {"id": "a", "text": "0.5 (300 / 600)"},
+        {"id": "b", "text": "0.333 (200 / 600)"},
+        {"id": "c", "text": "1.0"},
+        {"id": "d", "text": "0.167 (100 / 600)"}
+      ],
+      "correct": ["a"],
+      "explanation": "The North row filter context sums both North rows: 100+200=300 (numerator). ALL(Sales) removes all filters for the denominator: 600. 300/600 = 0.5. Row context is not involved here - this is pure filter-context manipulation in a visual.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/all-function-dax"
+    },
+    {
+      "id": "cd-0008",
+      "model": "**Product** (one-to-many to Sales). Table visual rows show Product[Category].\n\n**Product**\n\n| ProductKey | Category |\n|---|---|\n| 1 | Bikes |\n| 2 | Bikes |\n| 3 | Gear |\n\n**Sales**: PK1=100, PK2=200, PK3=50.",
+      "measure": "```DAX\nAvgProductSales = AVERAGEX ( VALUES ( Product[ProductKey] ), [Total Sales] )\n```",
+      "question": "On the 'Bikes' row of the table, what does AvgProductSales return?",
+      "options": [
+        {"id": "a", "text": "150 - average of PK1 (100) and PK2 (200)"},
+        {"id": "b", "text": "300 - sum of Bikes"},
+        {"id": "c", "text": "116.7 - average of all three products"},
+        {"id": "d", "text": "100"}
+      ],
+      "correct": ["a"],
+      "explanation": "The Bikes row context restricts VALUES(ProductKey) to {1,2}. AVERAGEX establishes row context per key; [Total Sales] uses context transition to get 100 and 200; the average is (100+200)/2 = 150. PK3 (Gear) is outside the Bikes filter.",
+      "sourceUrl": "https://learn.microsoft.com/en-us/dax/averagex-function-dax"
+    }
+  ]
+}

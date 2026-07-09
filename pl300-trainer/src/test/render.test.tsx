@@ -3,9 +3,10 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { HomePage } from "@/pages/HomePage";
 import { ExamPage } from "@/pages/ExamPage";
 import { StudyPage } from "@/pages/StudyPage";
+import { DrillsPage } from "@/pages/DrillsPage";
 import { QuestionView } from "@/components/QuestionView";
 import { Markdown } from "@/components/ui/Markdown";
-import { ALL_QUESTIONS, CASE_STUDIES } from "@/lib/content";
+import { ALL_QUESTIONS, CASE_STUDIES, DRILLS } from "@/lib/content";
 
 const noop = () => {};
 
@@ -30,6 +31,11 @@ describe("page render smoke", () => {
     const html = renderToStaticMarkup(<StudyPage navigate={noop} />);
     expect(html).toContain("Study mode");
     expect(html).toContain("Due for review");
+  });
+
+  it("DrillsPage renders the flashcards tab", () => {
+    const html = renderToStaticMarkup(<DrillsPage />);
+    expect(html).toContain("DAX flashcards");
   });
 });
 
@@ -58,5 +64,12 @@ describe("content renders through QuestionView", () => {
       <Markdown>{CASE_STUDIES[0].scenario}</Markdown>,
     );
     expect(html).toContain("md");
+  });
+
+  it("renders drill measures as DAX code blocks", () => {
+    for (const d of [...DRILLS.predictOutput, ...DRILLS.contextDrills]) {
+      const html = renderToStaticMarkup(<Markdown>{d.measure}</Markdown>);
+      expect(html).toContain("<pre");
+    }
   });
 });

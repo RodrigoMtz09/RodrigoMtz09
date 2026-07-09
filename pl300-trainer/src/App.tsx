@@ -2,6 +2,7 @@ import { useHashRoute } from "@/lib/router";
 import { HomePage } from "@/pages/HomePage";
 import { ExamPage } from "@/pages/ExamPage";
 import { StudyPage } from "@/pages/StudyPage";
+import { DrillsPage } from "@/pages/DrillsPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,6 +11,7 @@ const NAV = [
   { to: "/", label: "Home" },
   { to: "/exam", label: "Exam" },
   { to: "/study", label: "Study" },
+  { to: "/drills", label: "Drills" },
   { to: "/dashboard", label: "Dashboard" },
 ];
 
@@ -67,6 +69,8 @@ function Route({
       return <ExamPage navigate={navigate} />;
     case "/study":
       return <StudyPage navigate={navigate} />;
+    case "/drills":
+      return <DrillsPage />;
     case "/dashboard":
       return <DashboardPage navigate={navigate} />;
     default:
